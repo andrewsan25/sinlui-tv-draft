@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-space), ui-monospace, monospace;
+
+  --color-brand-navy: #0F2B5B;
+  --color-brand-blue: #2563EB;
+  --color-brand-orange: #F97316;
+  --color-brand-orange-vivid: #FF6B00;
+  --color-surface: #FFFFFF;
+  --color-surface-subtle: #F8FAFC;
+}
+
+@layer base {
+  html {
+    background-color: #FFFFFF;
+    color: #334155;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: #FFFFFF;
+    color: #334155;
+    overflow-x: clip;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    color: #0F2B5B;
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background-color: rgba(249, 115, 22, 0.16);
+    color: #0F2B5B;
+  }
+}
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.bg-editorial-grid {
+  background-image:
+    linear-gradient(to right, rgba(15, 43, 91, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(15, 43, 91, 0.045) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+.bg-editorial-dots {
+  background-image: radial-gradient(rgba(37, 99, 235, 0.14) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
