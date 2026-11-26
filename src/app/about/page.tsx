@@ -102,8 +102,16 @@ export default function AboutPage() {
             {/* Clean Hairline Spec Ledger */}
             <div className="lg:col-span-5">
               <div className="border-y border-slate-200">
-                <div className="border-b border-slate-200 py-4 font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-[#0F2B5B]">
-                  SPESIFIKASI ORGANISASI
+                <div className="flex items-center justify-between border-b border-slate-200 py-4">
+                  <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-[#0F2B5B]">
+                    SPESIFIKASI ORGANISASI
+                  </span>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/images/logo-sinlui-mark.png"
+                    alt="Emblem Sinlui TV"
+                    className="h-10 w-10 object-contain mix-blend-multiply"
+                  />
                 </div>
                 <dl className="divide-y divide-slate-200">
                   {ORG_FACTS.map((fact) => (

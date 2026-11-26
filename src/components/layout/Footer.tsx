@@ -10,7 +10,7 @@ export function Footer() {
         {/* Top Masthead Band */}
         <div className="flex flex-col justify-between gap-6 border-b border-slate-200 py-12 sm:flex-row sm:items-end sm:py-16">
           <div>
-            <LogoMark />
+            <LogoMark size="md" />
             <p className="mt-4 max-w-md text-sm leading-relaxed text-slate-600">
               {SITE_CONFIG.description}
             </p>

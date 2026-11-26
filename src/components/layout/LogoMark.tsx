@@ -2,31 +2,29 @@ import { cn } from "@/lib/utils";
 
 interface LogoMarkProps {
   className?: string;
+  size?: "sm" | "md";
 }
 
-export function LogoMark({ className }: LogoMarkProps) {
+export function LogoMark({ className, size = "sm" }: LogoMarkProps) {
   return (
     <div className={cn("inline-flex items-center gap-2.5", className)}>
-      <div className="relative flex h-7 w-7 items-center justify-center rounded-md bg-[#0F2B5B]">
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          aria-hidden="true"
-        >
-          <path
-            d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"
-            stroke="#FFFFFF"
-            strokeWidth="2"
-            strokeLinecap="square"
-          />
-          <circle cx="12" cy="12" r="2.75" fill="#FF5A00" />
-        </svg>
-      </div>
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src="/images/logo-sinlui-mark.png"
+        alt="Logo Sinlui TV"
+        className={cn(
+          "shrink-0 object-contain mix-blend-multiply",
+          size === "md" ? "h-11 w-11" : "h-9 w-9"
+        )}
+      />
 
-      <span className="font-display text-[17px] font-bold tracking-[-0.04em] text-[#0F2B5B]">
-        SINLUI<span className="text-[#FF5A00]">.TV</span>
+      <span
+        className={cn(
+          "font-display font-bold tracking-[-0.03em] text-[#0F2B5B]",
+          size === "md" ? "text-xl" : "text-[18px]"
+        )}
+      >
+        SINLUI<span className="text-[#FF5A00]">TV</span>
       </span>
     </div>
   );
