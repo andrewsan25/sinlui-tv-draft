@@ -8,6 +8,7 @@ import {
 import { SmoothScrollProvider } from "@/components/providers/SmoothScrollProvider";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
+import { ScrollOwlCompanion } from "@/components/layout/ScrollOwlCompanion";
 import { SITE_CONFIG } from "@/data/site";
 import "./globals.css";
 
@@ -69,6 +70,7 @@ export default function RootLayout({
           <Navbar />
           <main className="min-h-screen">{children}</main>
           <Footer />
+          <ScrollOwlCompanion />
         </SmoothScrollProvider>
       </body>
     </html>
