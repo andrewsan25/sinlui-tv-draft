@@ -20,8 +20,8 @@ function CountUpNumber({ value, suffix }: { value: number; suffix: string }) {
     }
 
     const controls = animate(0, value, {
-      duration: 1.35,
-      ease: [0.22, 1, 0.36, 1],
+      duration: 1.4,
+      ease: [0.16, 1, 0.3, 1],
       onUpdate: (latest) => {
         setDisplayValue(Math.round(latest));
       },
@@ -35,31 +35,26 @@ function CountUpNumber({ value, suffix }: { value: number; suffix: string }) {
   return (
     <span ref={ref} className="tabular-nums">
       {formatted}
-      {suffix ? <span className="text-[#FF5A00]">{suffix}</span> : null}
+      {suffix ? <span className="text-[#F46F15]">{suffix}</span> : null}
     </span>
   );
 }
 
-function StatCell({ stat }: { stat: StatItem }) {
+function StatItemBlock({ stat }: { stat: StatItem }) {
   return (
-    <div className="flex flex-col justify-between p-7 transition-colors duration-200 hover:bg-[#F8FAFC] sm:p-10">
-      <div className="flex items-center justify-between font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400">
-        <span>{stat.index}</span>
-        <span className="h-1.5 w-1.5 rounded-full bg-[#2563EB]/30" />
-      </div>
+    <div className="flex flex-col">
+      <span className="h-[2px] w-7 rounded-full bg-[#F46F15]/80" />
 
-      <div className="mt-6 font-display text-5xl font-bold tracking-[-0.04em] text-[#0F2B5B] lg:text-[3.75rem]">
+      <div className="mt-5 font-display text-5xl font-semibold tracking-[-0.04em] text-[#0F2B5B] lg:text-[3.5rem]">
         <CountUpNumber value={stat.value} suffix={stat.suffix} />
       </div>
 
-      <div className="mt-4">
-        <p className="font-display text-base font-bold text-[#0F2B5B]">
-          {stat.label}
-        </p>
-        <p className="mt-1 text-xs leading-relaxed text-slate-500">
-          {stat.sublabel}
-        </p>
-      </div>
+      <p className="mt-3 font-display text-base font-semibold text-[#0F2B5B]">
+        {stat.label}
+      </p>
+      <p className="mt-1 text-xs leading-relaxed text-slate-500">
+        {stat.sublabel}
+      </p>
     </div>
   );
 }
@@ -68,12 +63,12 @@ export function StatsSection() {
   return (
     <section
       aria-label="Rekam Jejak Angka Sinlui TV"
-      className="border-b border-slate-200 bg-white"
+      className="bg-white py-14 sm:py-20"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 divide-y divide-slate-200 sm:grid-cols-2 sm:divide-x lg:grid-cols-4 lg:divide-y-0">
+        <div className="grid grid-cols-2 gap-x-8 gap-y-12 lg:grid-cols-4">
           {HOME_STATS.map((stat) => (
-            <StatCell key={stat.id} stat={stat} />
+            <StatItemBlock key={stat.id} stat={stat} />
           ))}
         </div>
       </div>

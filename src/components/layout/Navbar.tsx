@@ -32,20 +32,20 @@ export function Navbar() {
   }, [mobileOpen]);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-slate-200/90 bg-white/85 backdrop-blur-xl">
-      <div className="mx-auto flex h-[72px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+    <header className="sticky top-3 z-50 w-full px-3 sm:px-6">
+      <div className="mx-auto flex h-[64px] max-w-5xl items-center justify-between rounded-full border border-[#0F2B5B]/[0.08] bg-white/80 pl-5 pr-2.5 shadow-[0_12px_40px_-12px_rgba(15,43,91,0.10)] backdrop-blur-2xl sm:pr-3">
         <Link
           href="/home"
-          className="focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB]"
+          className="rounded-full focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB]"
           aria-label="Sinlui TV Beranda"
         >
           <LogoMark />
         </Link>
 
-        {/* Minimalist Bare Links with 2px Bottom Indicator */}
+        {/* Center Gliding Pill Navigation */}
         <nav
           aria-label="Navigasi Utama"
-          className="hidden h-full items-center gap-8 md:flex"
+          className="hidden items-center gap-1 md:flex"
         >
           {NAV_LINKS.map((link) => {
             const isActive =
@@ -56,41 +56,44 @@ export function Navbar() {
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "relative flex h-full items-center text-[13px] font-medium tracking-wide transition-colors duration-200 focus:outline-none focus-visible:text-[#FF5A00]",
+                  "relative rounded-full px-4 py-2 text-[13px] font-medium transition-colors duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB]",
                   isActive
                     ? "text-[#0F2B5B]"
                     : "text-slate-500 hover:text-[#0F2B5B]"
                 )}
               >
-                <span>{link.label}</span>
                 {isActive ? (
                   <motion.span
-                    layoutId="navbar-active-line"
+                    layoutId="navbar-luxury-pill"
                     transition={
                       shouldReduceMotion
                         ? { duration: 0 }
-                        : { type: "spring", stiffness: 420, damping: 34 }
+                        : { type: "spring", stiffness: 360, damping: 32 }
                     }
-                    className="absolute inset-x-0 bottom-0 h-[2px] bg-[#FF5A00]"
+                    className="absolute inset-0 rounded-full bg-[#0F2B5B]/[0.06]"
                   />
                 ) : null}
+                <span className="relative z-10 inline-flex items-center gap-2">
+                  {isActive ? (
+                    <span className="h-1.5 w-1.5 rounded-full bg-[#F46F15]" />
+                  ) : null}
+                  <span>{link.label}</span>
+                </span>
               </Link>
             );
           })}
         </nav>
 
-        {/* Right Telemetry + Architectural Outline Button */}
-        <div className="flex items-center gap-4">
-          <span className="hidden font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-slate-400 lg:inline-block">
-            SBY · 26/27
-          </span>
-
+        {/* Right Sculpted Navy CTA + Circular Orange Medallion */}
+        <div className="flex items-center gap-2">
           <Link
             href="/about#divisi"
-            className="hidden items-center gap-1.5 rounded-md border border-[#0F2B5B] px-3.5 py-1.5 text-xs font-semibold tracking-wide text-[#0F2B5B] transition-colors duration-200 hover:bg-[#0F2B5B] hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] sm:inline-flex"
+            className="group hidden items-center gap-2.5 rounded-full bg-[#0F2B5B] py-1.5 pl-4 pr-1.5 text-xs font-semibold text-white shadow-sm transition-all duration-300 hover:bg-[#173976] hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F46F15] sm:inline-flex"
           >
-            <span>Divisi</span>
-            <ArrowUpRight className="h-3.5 w-3.5" />
+            <span>Divisi &amp; Karya</span>
+            <span className="flex h-7 w-7 items-center justify-center rounded-full bg-[#F46F15] text-white transition-transform duration-300 group-hover:rotate-12 group-hover:scale-105">
+              <ArrowUpRight className="h-3.5 w-3.5" />
+            </span>
           </Link>
 
           <button
@@ -98,30 +101,41 @@ export function Navbar() {
             onClick={() => setMobileOpen((prev) => !prev)}
             aria-expanded={mobileOpen}
             aria-label={mobileOpen ? "Tutup menu navigasi" : "Buka menu navigasi"}
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md border border-slate-200 bg-white text-[#0F2B5B] transition-colors hover:border-[#0F2B5B] md:hidden"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#0F2B5B]/10 bg-white text-[#0F2B5B] transition-colors hover:border-[#F46F15]/40 md:hidden"
           >
             {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>
         </div>
       </div>
 
-      {/* Architectural Hairline Mobile Drawer */}
+      {/* Floating Frosted Mobile Drawer */}
       <AnimatePresence>
         {mobileOpen ? (
           <motion.div
-            initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, height: 0 }}
-            transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-            className="overflow-hidden border-t border-slate-200 bg-white md:hidden"
+            initial={
+              shouldReduceMotion
+                ? { opacity: 1 }
+                : { opacity: 0, y: -8, scale: 0.98 }
+            }
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={
+              shouldReduceMotion
+                ? { opacity: 0 }
+                : { opacity: 0, y: -8, scale: 0.98 }
+            }
+            transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+            className="mx-auto mt-2.5 max-w-5xl overflow-hidden rounded-[28px] border border-[#0F2B5B]/[0.08] bg-white/95 p-4 shadow-luxury backdrop-blur-2xl md:hidden"
           >
-            <div className="mx-auto max-w-7xl divide-y divide-slate-200 px-4">
-              <div className="flex items-center justify-between py-3 font-mono text-[11px] uppercase tracking-[0.14em] text-slate-400">
-                <span>PERIODE {SITE_CONFIG.period}</span>
-                <span className="text-[#FF5A00]">UNIT SIARAN</span>
-              </div>
+            <div className="mb-3 flex items-center justify-between px-3 text-xs text-slate-400">
+              <span>Periode {SITE_CONFIG.period}</span>
+              <span className="inline-flex items-center gap-1.5 font-medium text-[#F46F15]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#F46F15]" />
+                On Air
+              </span>
+            </div>
 
-              {NAV_LINKS.map((link, idx) => {
+            <div className="space-y-1.5">
+              {NAV_LINKS.map((link) => {
                 const isActive =
                   pathname === link.href || pathname.startsWith(`${link.href}/`);
 
@@ -129,51 +143,42 @@ export function Navbar() {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className="flex items-center justify-between py-4 transition-colors"
+                    className={cn(
+                      "flex items-center justify-between rounded-2xl px-4 py-3 transition-colors",
+                      isActive
+                        ? "bg-[#F6F8FC] text-[#0F2B5B]"
+                        : "text-slate-600 hover:bg-[#F6F8FC]/60 hover:text-[#0F2B5B]"
+                    )}
                   >
-                    <div className="flex items-baseline gap-3">
-                      <span
-                        className={cn(
-                          "font-mono text-xs",
-                          isActive ? "text-[#FF5A00]" : "text-slate-400"
-                        )}
-                      >
-                        0{idx + 1}
-                      </span>
-                      <div>
-                        <span
-                          className={cn(
-                            "block font-display text-lg font-bold",
-                            isActive ? "text-[#0F2B5B]" : "text-slate-700"
-                          )}
-                        >
-                          {link.label}
-                        </span>
-                        <span className="block text-xs text-slate-500">
-                          {link.description}
-                        </span>
+                    <div>
+                      <div className="flex items-center gap-2 font-display text-base font-semibold">
+                        {isActive ? (
+                          <span className="h-2 w-2 rounded-full bg-[#F46F15]" />
+                        ) : null}
+                        <span>{link.label}</span>
                       </div>
+                      <p className="mt-0.5 text-xs text-slate-500">
+                        {link.description}
+                      </p>
                     </div>
                     <ArrowUpRight
                       className={cn(
                         "h-4 w-4",
-                        isActive ? "text-[#FF5A00]" : "text-slate-400"
+                        isActive ? "text-[#F46F15]" : "text-slate-400"
                       )}
                     />
                   </Link>
                 );
               })}
-
-              <div className="py-4">
-                <Link
-                  href="/about#divisi"
-                  className="flex w-full items-center justify-between rounded-md bg-[#0F2B5B] px-4 py-3 text-sm font-medium text-white"
-                >
-                  <span>Ruang Lingkup Lima Divisi</span>
-                  <ArrowUpRight className="h-4 w-4 text-[#FF5A00]" />
-                </Link>
-              </div>
             </div>
+
+            <Link
+              href="/about#divisi"
+              className="mt-3 flex w-full items-center justify-center gap-2 rounded-full bg-[#0F2B5B] px-5 py-3 text-sm font-semibold text-white transition-colors hover:bg-[#F46F15]"
+            >
+              <span>Jelajahi Divisi &amp; Karya</span>
+              <ArrowUpRight className="h-4 w-4" />
+            </Link>
           </motion.div>
         ) : null}
       </AnimatePresence>

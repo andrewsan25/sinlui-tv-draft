@@ -33,56 +33,60 @@ export function OrgDirectory() {
   const showDivisionSection = divisionMembers.length > 0;
 
   return (
-    <section className="bg-white py-12 sm:py-16">
+    <section className="bg-white py-10 sm:py-16">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Architectural Underline Filter Tab Bar */}
-        <div
-          role="tablist"
-          aria-label="Filter divisi kepengurusan"
-          className="flex flex-wrap gap-x-7 gap-y-2 border-b border-slate-200"
-        >
-          {DIVISION_FILTERS.map((filter) => {
-            const isActive = activeFilter === filter;
-            const count = countForFilter(filter);
+        {/* Floating Pill Filter Bar */}
+        <div className="flex justify-start">
+          <div
+            role="tablist"
+            aria-label="Filter divisi kepengurusan"
+            className="inline-flex flex-wrap gap-1.5 rounded-3xl border border-[#0F2B5B]/[0.06] bg-[#F6F8FC] p-1.5 sm:rounded-full"
+          >
+            {DIVISION_FILTERS.map((filter) => {
+              const isActive = activeFilter === filter;
+              const count = countForFilter(filter);
 
-            return (
-              <button
-                key={filter}
-                type="button"
-                role="tab"
-                aria-selected={isActive}
-                onClick={() => setActiveFilter(filter)}
-                className={cn(
-                  "relative inline-flex items-baseline gap-1.5 pb-3.5 text-sm font-semibold transition-colors",
-                  isActive
-                    ? "text-[#0F2B5B]"
-                    : "text-slate-400 hover:text-[#0F2B5B]"
-                )}
-              >
-                <span>{filter}</span>
-                <sup
+              return (
+                <button
+                  key={filter}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  onClick={() => setActiveFilter(filter)}
                   className={cn(
-                    "font-mono text-[10px]",
-                    isActive ? "text-[#FF5A00]" : "text-slate-400"
+                    "relative inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold transition-colors duration-300 sm:text-sm",
+                    isActive
+                      ? "text-white"
+                      : "text-slate-500 hover:text-[#0F2B5B]"
                   )}
                 >
-                  {count}
-                </sup>
+                  {isActive ? (
+                    <motion.span
+                      layoutId="activeFilterTab"
+                      transition={
+                        shouldReduceMotion
+                          ? { duration: 0 }
+                          : { type: "spring", stiffness: 360, damping: 32 }
+                      }
+                      className="absolute inset-0 rounded-full bg-[#F46F15] shadow-sm shadow-orange-500/20"
+                    />
+                  ) : null}
 
-                {isActive ? (
-                  <motion.span
-                    layoutId="activeFilterTab"
-                    transition={
-                      shouldReduceMotion
-                        ? { duration: 0 }
-                        : { type: "spring", stiffness: 420, damping: 34 }
-                    }
-                    className="absolute inset-x-0 bottom-0 h-[2px] bg-[#FF5A00]"
-                  />
-                ) : null}
-              </button>
-            );
-          })}
+                  <span className="relative z-10">{filter}</span>
+                  <span
+                    className={cn(
+                      "relative z-10 rounded-full px-1.5 py-0.5 text-[10px]",
+                      isActive
+                        ? "bg-white/20 text-white"
+                        : "bg-white text-slate-500"
+                    )}
+                  >
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Hierarchy Section 1: BPH */}
@@ -92,24 +96,24 @@ export function OrgDirectory() {
               key="bph-section"
               layout={!shouldReduceMotion}
               initial={
-                shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 8 }
+                shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 10 }
               }
               animate={{ opacity: 1, y: 0 }}
-              exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
-              transition={{ duration: 0.24 }}
+              exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -10 }}
+              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
               className="mt-12"
             >
-              <div className="mb-8 flex flex-wrap items-baseline justify-between gap-2 border-b border-slate-200 pb-4">
+              <div className="mb-8 flex flex-wrap items-end justify-between gap-3">
                 <div>
-                  <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-[#FF5A00]">
-                    01 / PIMPINAN INTI
-                  </span>
-                  <h2 className="mt-1 font-display text-2xl font-bold text-[#0F2B5B] sm:text-3xl">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#F46F15]">
+                    Pimpinan Inti
+                  </p>
+                  <h2 className="mt-1 font-display text-2xl font-semibold text-[#0F2B5B] sm:text-3xl">
                     Badan Pengurus Harian (BPH)
                   </h2>
                 </div>
-                <span className="font-mono text-xs text-slate-400">
-                  06 PERSONEL INTI
+                <span className="rounded-full bg-[#F6F8FC] px-3.5 py-1 text-xs font-medium text-slate-500">
+                  6 Pengurus Inti
                 </span>
               </div>
 
@@ -120,7 +124,7 @@ export function OrgDirectory() {
                     key={member.id}
                     member={member}
                     featured
-                    codeLabel={`BPH-0${idx + 1}`}
+                    codeLabel={`BPH · 0${idx + 1}`}
                   />
                 ))}
               </div>
@@ -131,7 +135,7 @@ export function OrgDirectory() {
                   <MemberCard
                     key={member.id}
                     member={member}
-                    codeLabel={`BPH-0${idx + 3}`}
+                    codeLabel={`BPH · 0${idx + 3}`}
                   />
                 ))}
               </div>
@@ -144,26 +148,26 @@ export function OrgDirectory() {
               key={`divisi-section-${activeFilter}`}
               layout={!shouldReduceMotion}
               initial={
-                shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 8 }
+                shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 10 }
               }
               animate={{ opacity: 1, y: 0 }}
-              exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }}
-              transition={{ duration: 0.24 }}
+              exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -10 }}
+              transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
               className={cn(showBphSection ? "mt-20" : "mt-12")}
             >
-              <div className="mb-8 flex flex-wrap items-baseline justify-between gap-2 border-b border-slate-200 pb-4">
+              <div className="mb-8 flex flex-wrap items-end justify-between gap-3">
                 <div>
-                  <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-[#2563EB]">
-                    02 / PERSONEL LAPANGAN &amp; STUDIO
-                  </span>
-                  <h2 className="mt-1 font-display text-2xl font-bold text-[#0F2B5B] sm:text-3xl">
+                  <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#2563EB]">
+                    Personel Lapangan &amp; Studio
+                  </p>
+                  <h2 className="mt-1 font-display text-2xl font-semibold text-[#0F2B5B] sm:text-3xl">
                     {activeFilter === "Semua"
                       ? "Koordinator & Anggota Divisi"
                       : `Divisi ${activeFilter}`}
                   </h2>
                 </div>
-                <span className="font-mono text-xs text-slate-400">
-                  {String(divisionMembers.length).padStart(2, "0")} PERSONEL
+                <span className="rounded-full bg-[#F6F8FC] px-3.5 py-1 text-xs font-medium text-slate-500">
+                  {divisionMembers.length} Personel
                 </span>
               </div>
 

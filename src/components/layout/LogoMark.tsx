@@ -21,10 +21,10 @@ export function LogoMark({ className, size = "sm" }: LogoMarkProps) {
       <span
         className={cn(
           "font-display font-bold tracking-[-0.03em] text-[#0F2B5B]",
-          size === "md" ? "text-xl" : "text-[18px]"
+          size === "md" ? "text-xl" : "text-[17px]"
         )}
       >
-        SINLUI<span className="text-[#FF5A00]">TV</span>
+        Sinlui <span className="text-[#F46F15]">TV</span>
       </span>
     </div>
   );

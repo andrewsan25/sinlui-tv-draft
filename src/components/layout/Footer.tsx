@@ -1,114 +1,135 @@
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Instagram, Mail, MapPin, Youtube } from "lucide-react";
 import { NAV_LINKS, SITE_CONFIG, SOCIAL_LINKS } from "@/data/site";
 import { LogoMark } from "./LogoMark";
 
+function TikTokIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.9"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+    </svg>
+  );
+}
+
 export function Footer() {
   return (
-    <footer className="border-t border-slate-200 bg-white">
+    <footer className="border-t border-[#0F2B5B]/[0.06] bg-[#F6F8FC] pb-10 pt-16 sm:pt-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Top Masthead Band */}
-        <div className="flex flex-col justify-between gap-6 border-b border-slate-200 py-12 sm:flex-row sm:items-end sm:py-16">
-          <div>
+        {/* Top Serene Editorial Statement */}
+        <div className="flex flex-col justify-between gap-8 pb-14 lg:flex-row lg:items-end">
+          <div className="max-w-lg">
             <LogoMark size="md" />
-            <p className="mt-4 max-w-md text-sm leading-relaxed text-slate-600">
+            <p className="mt-5 font-display text-2xl font-semibold leading-snug tracking-tight text-[#0F2B5B] sm:text-3xl">
+              Mengabadikan setiap cerita sekolah dalam{" "}
+              <span className="font-serif italic font-normal text-[#2563EB]">
+                bingkai sinematik.
+              </span>
+            </p>
+          </div>
+
+          <div className="flex flex-wrap gap-3">
+            {SOCIAL_LINKS.map((item) => {
+              const Icon =
+                item.name === "Instagram"
+                  ? Instagram
+                  : item.name === "YouTube"
+                    ? Youtube
+                    : TikTokIcon;
+
+              return (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="group inline-flex items-center gap-2.5 rounded-full border border-[#0F2B5B]/[0.08] bg-white px-4 py-2.5 text-xs font-semibold text-[#0F2B5B] shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:border-[#F46F15]/40 hover:shadow-md"
+                >
+                  <Icon className="h-4 w-4 text-[#F46F15]" />
+                  <span>{item.name}</span>
+                  <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#F46F15]" />
+                </a>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Open Breathable 12-Column Directory */}
+        <div className="grid grid-cols-1 gap-10 border-t border-[#0F2B5B]/[0.07] py-12 md:grid-cols-12">
+          <div className="md:col-span-5">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">
+              Tentang Studio
+            </p>
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-slate-600">
               {SITE_CONFIG.description}
             </p>
           </div>
 
-          <div className="sm:text-right">
-            <p className="font-mono text-[11px] uppercase tracking-[0.16em] text-slate-400">
-              LOKASI STUDIO
+          <div className="md:col-span-3">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">
+              Navigasi
             </p>
-            <p className="mt-1 text-sm font-medium text-[#0F2B5B]">
-              {SITE_CONFIG.schoolName}
-            </p>
-            <p className="text-xs text-slate-500">{SITE_CONFIG.location}</p>
-          </div>
-        </div>
-
-        {/* Hairline 12-Column Directory */}
-        <div className="grid grid-cols-1 divide-y divide-slate-200 md:grid-cols-12 md:divide-x md:divide-y-0">
-          {/* Contact Column */}
-          <div className="py-8 md:col-span-4 md:pr-8">
-            <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400">
-              01 / KOORDINASI LIPUTAN
-            </p>
-            <p className="mt-3 text-sm text-slate-600">
-              Untuk kebutuhan dokumentasi acara resmi atau kolaborasi media sekolah:
-            </p>
-            <a
-              href={`mailto:${SITE_CONFIG.email}`}
-              className="mt-3 inline-flex items-center gap-1.5 border-b border-[#0F2B5B]/30 pb-0.5 font-display text-base font-bold text-[#0F2B5B] transition-colors hover:border-[#FF5A00] hover:text-[#FF5A00]"
-            >
-              <span>{SITE_CONFIG.email}</span>
-              <ArrowUpRight className="h-4 w-4" />
-            </a>
-          </div>
-
-          {/* Navigation Index */}
-          <div className="py-8 md:col-span-4 md:px-8">
-            <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400">
-              02 / INDEKS HALAMAN
-            </p>
-            <ul className="mt-3 divide-y divide-slate-100">
+            <ul className="mt-3.5 space-y-2.5">
               {NAV_LINKS.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="group flex items-center justify-between py-2.5 text-sm font-medium text-[#0F2B5B] transition-colors hover:text-[#FF5A00]"
+                    className="inline-flex items-center gap-1.5 text-sm font-medium text-[#0F2B5B] transition-colors hover:text-[#F46F15]"
                   >
                     <span>{link.label}</span>
-                    <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#FF5A00]" />
                   </Link>
                 </li>
               ))}
               <li>
                 <Link
                   href="/about#divisi"
-                  className="group flex items-center justify-between py-2.5 text-sm font-medium text-[#0F2B5B] transition-colors hover:text-[#2563EB]"
+                  className="inline-flex items-center gap-1.5 text-sm font-medium text-[#0F2B5B] transition-colors hover:text-[#2563EB]"
                 >
                   <span>Ruang Lingkup Divisi</span>
-                  <ArrowUpRight className="h-3.5 w-3.5 text-slate-400 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#2563EB]" />
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Official Channels */}
-          <div className="py-8 md:col-span-4 md:pl-8">
-            <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400">
-              03 / KANAL RESMI
+          <div className="md:col-span-4">
+            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-slate-400">
+              Kontak &amp; Lokasi
             </p>
-            <ul className="mt-3 divide-y divide-slate-100">
-              {SOCIAL_LINKS.map((item) => (
-                <li key={item.name}>
-                  <a
-                    href={item.href}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="group flex items-center justify-between py-2.5 transition-colors"
-                  >
-                    <div>
-                      <span className="block text-sm font-medium text-[#0F2B5B] group-hover:text-[#FF5A00]">
-                        {item.name}
-                      </span>
-                      <span className="block font-mono text-[11px] text-slate-400">
-                        {item.handle}
-                      </span>
-                    </div>
-                    <ArrowUpRight className="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-[#FF5A00]" />
-                  </a>
-                </li>
-              ))}
-            </ul>
+            <div className="mt-3.5 space-y-3 text-sm text-slate-600">
+              <div className="flex items-start gap-2.5">
+                <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-[#2563EB]" />
+                <span>
+                  {SITE_CONFIG.schoolName} · {SITE_CONFIG.location}
+                </span>
+              </div>
+              <div className="flex items-center gap-2.5">
+                <Mail className="h-4 w-4 shrink-0 text-[#F46F15]" />
+                <a
+                  href={`mailto:${SITE_CONFIG.email}`}
+                  className="font-medium text-[#0F2B5B] transition-colors hover:text-[#F46F15]"
+                >
+                  {SITE_CONFIG.email}
+                </a>
+              </div>
+            </div>
           </div>
         </div>
 
-        {/* Colophon Bottom Bar */}
-        <div className="flex flex-col items-start justify-between gap-2 border-t border-slate-200 py-6 font-mono text-[11px] text-slate-400 sm:flex-row sm:items-center">
+        {/* Colophon */}
+        <div className="flex flex-col items-start justify-between gap-2 border-t border-[#0F2B5B]/[0.07] pt-8 text-xs text-slate-400 sm:flex-row sm:items-center">
           <span>{SITE_CONFIG.copyright}</span>
-          <span>SINLUI TV · DOKUMENTASI &amp; BROADCASTING · {SITE_CONFIG.period}</span>
+          <span>
+            Unit Dokumentasi &amp; Penyiaran Sekolah · Periode{" "}
+            {SITE_CONFIG.period}
+          </span>
         </div>
       </div>
     </footer>

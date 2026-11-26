@@ -10,49 +10,49 @@ import { cn } from "@/lib/utils";
 function DivisionVisualPreview({ division }: { division: DivisionDetail }) {
   if (division.previewMode === "multiview") {
     return (
-      <div className="grid h-56 w-full grid-cols-2 grid-rows-2 gap-0.5 overflow-hidden rounded-lg border border-slate-200 bg-[#0F2B5B]">
-        <div className="relative overflow-hidden">
+      <div className="grid h-60 w-full grid-cols-2 grid-rows-2 gap-1.5 overflow-hidden rounded-[20px] bg-[#0F2B5B] p-1.5">
+        <div className="relative overflow-hidden rounded-tl-[16px]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/images/hero-broadcast.jpg"
             alt="Angle 1 Broadcast"
             className="h-full w-full object-cover"
           />
-          <span className="absolute left-2 top-2 bg-[#FF5A00] px-1.5 py-0.5 font-mono text-[9px] font-bold text-white">
-            PGM · CAM 1
+          <span className="absolute left-2.5 top-2.5 rounded-full bg-[#F46F15] px-2.5 py-0.5 text-[10px] font-semibold text-white">
+            Live · Cam 1
           </span>
         </div>
-        <div className="relative overflow-hidden">
+        <div className="relative overflow-hidden rounded-tr-[16px]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/images/work-stage.jpg"
             alt="Angle 2 Stage"
             className="h-full w-full object-cover"
           />
-          <span className="absolute left-2 top-2 bg-black/60 px-1.5 py-0.5 font-mono text-[9px] text-white">
-            PVW · CAM 2
+          <span className="absolute left-2.5 top-2.5 rounded-full bg-black/50 px-2.5 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
+            Cam 2
           </span>
         </div>
-        <div className="relative overflow-hidden">
+        <div className="relative overflow-hidden rounded-bl-[16px]">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/images/work-arena.jpg"
             alt="Angle 3 Arena"
             className="h-full w-full object-cover"
           />
-          <span className="absolute left-2 top-2 bg-black/60 px-1.5 py-0.5 font-mono text-[9px] text-white">
-            AUX · CAM 3
+          <span className="absolute left-2.5 top-2.5 rounded-full bg-black/50 px-2.5 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
+            Cam 3
           </span>
         </div>
-        <div className="flex flex-col justify-between bg-[#0F2B5B] p-3 text-white">
-          <span className="font-mono text-[10px] uppercase tracking-widest text-orange-300">
-            ATEM MULTIVIEW
+        <div className="flex flex-col justify-between rounded-br-[16px] bg-[#143773] p-4 text-white">
+          <span className="text-[11px] font-medium text-orange-300">
+            ATEM Multiview
           </span>
-          <span className="font-display text-sm font-bold">
+          <span className="font-display text-base font-semibold">
             1080p60 Master Feed
           </span>
-          <span className="font-mono text-[10px] text-blue-200">
-            COMMS + AUDIO TALLY
+          <span className="text-[11px] text-blue-200">
+            Audio &amp; Intercom Sync
           </span>
         </div>
       </div>
@@ -61,8 +61,8 @@ function DivisionVisualPreview({ division }: { division: DivisionDetail }) {
 
   if (division.previewMode === "editorial-grid") {
     return (
-      <div className="grid h-56 w-full grid-cols-12 gap-3 overflow-hidden rounded-lg border border-slate-200 bg-[#F8FAFC] p-4">
-        <div className="col-span-7 overflow-hidden rounded-md border border-slate-200 bg-white">
+      <div className="grid h-60 w-full grid-cols-12 gap-3.5 overflow-hidden rounded-[20px] bg-[#F6F8FC] p-4">
+        <div className="col-span-7 overflow-hidden rounded-[14px] bg-white shadow-sm">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={division.image}
@@ -70,23 +70,23 @@ function DivisionVisualPreview({ division }: { division: DivisionDetail }) {
             className="h-full w-full object-cover"
           />
         </div>
-        <div className="col-span-5 flex flex-col justify-between rounded-md border border-slate-200 bg-white p-3.5">
+        <div className="col-span-5 flex flex-col justify-between rounded-[14px] bg-white p-4 shadow-sm">
           <div>
-            <span className="font-mono text-[9px] uppercase tracking-widest text-[#FF5A00]">
-              BRAND SYSTEM
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-[#F46F15]">
+              Brand System
             </span>
-            <p className="mt-1 font-display text-sm font-bold text-[#0F2B5B]">
+            <p className="mt-1 font-display text-base font-semibold text-[#0F2B5B]">
               Sinlui TV Release Kit
             </p>
           </div>
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <div className="flex gap-1.5">
-              <span className="h-5 flex-1 rounded-xs bg-[#0F2B5B]" />
-              <span className="h-5 flex-1 rounded-xs bg-[#2563EB]" />
-              <span className="h-5 flex-1 rounded-xs bg-[#FF5A00]" />
+              <span className="h-5 flex-1 rounded-full bg-[#0F2B5B]" />
+              <span className="h-5 flex-1 rounded-full bg-[#2563EB]" />
+              <span className="h-5 flex-1 rounded-full bg-[#F46F15]" />
             </div>
-            <p className="font-mono text-[9px] text-slate-400">
-              THUMBNAIL · POSTER · IG
+            <p className="text-[11px] text-slate-400">
+              Thumbnail · Poster · Feeds
             </p>
           </div>
         </div>
@@ -95,15 +95,15 @@ function DivisionVisualPreview({ division }: { division: DivisionDetail }) {
   }
 
   return (
-    <div className="relative h-56 w-full overflow-hidden rounded-lg border border-slate-200 bg-slate-100">
+    <div className="relative h-60 w-full overflow-hidden rounded-[20px] bg-slate-100">
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={division.image}
         alt={division.name}
         className="h-full w-full object-cover"
       />
-      <span className="absolute left-3 top-3 rounded-sm bg-[#0F2B5B]/85 px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-white backdrop-blur-sm">
-        DIVISI {division.index} · {division.shortName}
+      <span className="absolute left-3.5 top-3.5 rounded-full bg-white/90 px-3.5 py-1 text-[11px] font-semibold text-[#0F2B5B] shadow-xs backdrop-blur-md">
+        Divisi {division.shortName}
       </span>
     </div>
   );
@@ -119,141 +119,141 @@ export function DivisionsShowcase() {
   return (
     <section
       id="divisi"
-      className="scroll-mt-24 border-b border-slate-200 bg-[#F8FAFC] py-16 sm:py-24"
+      className="scroll-mt-24 bg-white py-14 sm:py-24"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl">
-          <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-[#FF5A00]">
-            03 / RUANG LINGKUP &amp; DIVISI KERJA
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#F46F15]">
+            Ruang Lingkup &amp; Divisi Kerja
           </p>
-          <h2 className="mt-2 font-display text-3xl font-bold tracking-[-0.035em] text-[#0F2B5B] sm:text-4xl">
-            Struktur Produksi Lima Divisi.
+          <h2 className="mt-2 font-display text-3xl font-semibold tracking-[-0.03em] text-[#0F2B5B] sm:text-5xl">
+            Struktur produksi{" "}
+            <span className="font-serif italic font-normal text-[#2563EB]">
+              lima divisi.
+            </span>
           </h2>
         </div>
 
-        <div className="mt-10 grid grid-cols-1 overflow-hidden rounded-xl border border-slate-200 bg-white lg:grid-cols-12">
-          {/* Left Hairline Interactive Index */}
-          <div className="divide-y divide-slate-200 border-b border-slate-200 lg:col-span-5 lg:border-b-0 lg:border-r">
-            {DIVISIONS.map((division) => {
-              const isSelected = division.id === activeDivision.id;
+        {/* Sculpted Porcelain Container */}
+        <div className="mt-10 rounded-[36px] border border-[#0F2B5B]/[0.06] bg-[#F6F8FC] p-4 sm:p-6">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+            {/* Left Floating Selector Cards */}
+            <div className="space-y-2.5 lg:col-span-5">
+              {DIVISIONS.map((division) => {
+                const isSelected = division.id === activeDivision.id;
 
-              return (
-                <button
-                  key={division.id}
-                  id={`divisi-${division.id}`}
-                  type="button"
-                  onClick={() => setSelectedId(division.id)}
-                  className={cn(
-                    "relative flex w-full items-center justify-between px-6 py-5 text-left transition-colors",
-                    isSelected
-                      ? "bg-[#F8FAFC]"
-                      : "bg-white hover:bg-slate-50/70"
-                  )}
-                >
-                  {isSelected ? (
-                    <span
-                      aria-hidden="true"
-                      className="absolute inset-y-0 left-0 w-[3px] bg-[#FF5A00]"
-                    />
-                  ) : null}
+                return (
+                  <button
+                    key={division.id}
+                    id={`divisi-${division.id}`}
+                    type="button"
+                    onClick={() => setSelectedId(division.id)}
+                    className={cn(
+                      "relative flex w-full items-center justify-between rounded-[22px] p-4 text-left transition-all duration-300 sm:p-5",
+                      isSelected
+                        ? "bg-white shadow-luxury"
+                        : "bg-transparent hover:bg-white/60"
+                    )}
+                  >
+                    <div className="flex items-center gap-4">
+                      <span
+                        className={cn(
+                          "flex h-11 w-11 shrink-0 items-center justify-center rounded-full transition-colors",
+                          isSelected
+                            ? division.accent === "orange"
+                              ? "bg-[#F46F15] text-white"
+                              : "bg-[#0F2B5B] text-white"
+                            : "bg-white text-[#0F2B5B]"
+                        )}
+                      >
+                        <DivisionIcon iconKey={division.iconKey} />
+                      </span>
+                      <div>
+                        <h3 className="font-display text-base font-semibold text-[#0F2B5B]">
+                          {division.name}
+                        </h3>
+                        <p className="mt-0.5 line-clamp-1 text-xs text-slate-500">
+                          {division.tagline}
+                        </p>
+                      </div>
+                    </div>
 
-                  <div className="flex items-start gap-4">
                     <span
                       className={cn(
-                        "mt-0.5 font-mono text-xs font-bold",
-                        isSelected ? "text-[#FF5A00]" : "text-slate-400"
+                        "ml-3 h-2 w-2 shrink-0 rounded-full transition-colors",
+                        isSelected ? "bg-[#F46F15]" : "bg-slate-300"
                       )}
-                    >
-                      {division.index}
+                    />
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Right Pure White Detail Stage */}
+            <div className="rounded-[28px] border border-[#0F2B5B]/[0.06] bg-white p-6 shadow-luxury sm:p-8 lg:col-span-7">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeDivision.id}
+                  initial={
+                    shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 10 }
+                  }
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={
+                    shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -10 }
+                  }
+                  transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                >
+                  <DivisionVisualPreview division={activeDivision} />
+
+                  <div className="mt-6">
+                    <span className="text-xs font-semibold text-[#2563EB]">
+                      Divisi {activeDivision.shortName}
                     </span>
+                    <h3 className="mt-1 font-display text-2xl font-semibold text-[#0F2B5B]">
+                      {activeDivision.name}
+                    </h3>
+                    <p className="mt-2.5 text-sm leading-relaxed text-slate-500 sm:text-base">
+                      {activeDivision.description}
+                    </p>
+                  </div>
+
+                  <div className="mt-6 grid grid-cols-1 gap-6 border-t border-slate-100 pt-6 sm:grid-cols-2">
                     <div>
-                      <h3 className="font-display text-lg font-bold text-[#0F2B5B]">
-                        {division.name}
-                      </h3>
-                      <p className="mt-0.5 line-clamp-1 text-xs text-slate-500">
-                        {division.tagline}
+                      <p className="text-xs font-semibold text-[#0F2B5B]">
+                        Output Utama
                       </p>
+                      <ul className="mt-3 space-y-2.5">
+                        {activeDivision.deliverables.map((item) => (
+                          <li
+                            key={item}
+                            className="flex items-start gap-2.5 text-sm text-slate-600"
+                          >
+                            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#F46F15]" />
+                            <span>{item}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+
+                    <div>
+                      <p className="text-xs font-semibold text-[#0F2B5B]">
+                        Perangkat &amp; Workflow
+                      </p>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {activeDivision.tools.map((tool) => (
+                          <span
+                            key={tool}
+                            className="rounded-full bg-[#F6F8FC] px-3.5 py-1.5 text-xs font-medium text-[#0F2B5B]"
+                          >
+                            {tool}
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
-
-                  <DivisionIcon
-                    iconKey={division.iconKey}
-                    className={cn(
-                      "ml-3 h-4 w-4 shrink-0",
-                      isSelected ? "text-[#0F2B5B]" : "text-slate-400"
-                    )}
-                  />
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Right Specification Sheet */}
-          <div className="p-6 sm:p-8 lg:col-span-7">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeDivision.id}
-                initial={
-                  shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 8 }
-                }
-                animate={{ opacity: 1, y: 0 }}
-                exit={
-                  shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: -8 }
-                }
-                transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <DivisionVisualPreview division={activeDivision} />
-
-                <div className="mt-6">
-                  <div className="flex items-center gap-2 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-[#2563EB]">
-                    <span>DIVISI {activeDivision.index}</span>
-                    <span>·</span>
-                    <span>{activeDivision.shortName}</span>
-                  </div>
-                  <h3 className="mt-1.5 font-display text-2xl font-bold text-[#0F2B5B]">
-                    {activeDivision.name}
-                  </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-slate-600 sm:text-base">
-                    {activeDivision.description}
-                  </p>
-                </div>
-
-                <div className="mt-6 grid grid-cols-1 gap-6 border-t border-slate-200 pt-6 sm:grid-cols-2">
-                  <div>
-                    <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-[#0F2B5B]">
-                      Output Utama
-                    </p>
-                    <ul className="mt-3 space-y-2.5">
-                      {activeDivision.deliverables.map((item) => (
-                        <li
-                          key={item}
-                          className="flex items-start gap-2.5 text-sm text-slate-700"
-                        >
-                          <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-[#FF5A00]" />
-                          <span>{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  <div>
-                    <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-[#0F2B5B]">
-                      Perangkat &amp; Stack
-                    </p>
-                    <ul className="mt-3 divide-y divide-slate-100 border-y border-slate-100">
-                      {activeDivision.tools.map((tool) => (
-                        <li
-                          key={tool}
-                          className="py-2 font-mono text-xs font-medium text-[#0F2B5B]"
-                        >
-                          {tool}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
+                </motion.div>
+              </AnimatePresence>
+            </div>
           </div>
         </div>
       </div>

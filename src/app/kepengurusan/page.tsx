@@ -14,34 +14,39 @@ export default function KepengurusanPage() {
   return (
     <PageTransition>
       {/* Editorial Roster Masthead */}
-      <section className="border-b border-slate-200 bg-white pb-12 pt-10 sm:pb-16 sm:pt-14">
+      <section className="bg-white pb-8 pt-12 sm:pb-12 sm:pt-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <nav
             aria-label="Breadcrumb"
-            className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-slate-400"
+            className="flex items-center gap-1.5 text-xs font-medium text-slate-400"
           >
-            <Link href="/home" className="hover:text-[#0F2B5B]">
+            <Link href="/home" className="transition-colors hover:text-[#0F2B5B]">
               Home
             </Link>
             <ChevronRight className="h-3.5 w-3.5" />
-            <span className="font-semibold text-[#FF5A00]">Kepengurusan</span>
+            <span className="font-semibold text-[#F46F15]">Kepengurusan</span>
           </nav>
 
-          <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-end">
+          <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-8">
-              <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-[#FF5A00]">
-                PERIODE AKTIF {PERIODE_AKTIF}
-              </p>
-              <h1 className="mt-3 font-display text-4xl font-bold uppercase leading-[0.96] tracking-[-0.045em] text-[#0F2B5B] sm:text-6xl">
-                SUSUNAN KEPENGURUSAN
+              <span className="inline-flex items-center gap-2 rounded-full bg-orange-50 px-3.5 py-1 text-xs font-semibold text-[#F46F15]">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#F46F15]" />
+                Periode {PERIODE_AKTIF}
+              </span>
+              <h1 className="mt-4 font-display text-4xl font-semibold leading-[1.06] tracking-[-0.035em] text-[#0F2B5B] sm:text-6xl">
+                Susunan{" "}
+                <span className="font-serif italic font-normal text-[#2563EB]">
+                  Kepengurusan
+                </span>{" "}
+                Sinlui TV.
               </h1>
             </div>
 
             <div className="lg:col-span-4 lg:text-right">
-              <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-slate-400">
-                {MEMBERS.length} PERSONEL · 06 BPH · 05 DIVISI
+              <p className="text-xs font-semibold text-[#0F2B5B]">
+                {MEMBERS.length} Personel · 6 BPH · 5 Divisi
               </p>
-              <p className="mt-2 text-sm leading-relaxed text-slate-600">
+              <p className="mt-2 text-sm leading-relaxed text-slate-500">
                 Pimpinan harian, koordinator, dan kru aktif yang menggerakkan
                 produksi dokumentasi serta siaran sekolah.
               </p>

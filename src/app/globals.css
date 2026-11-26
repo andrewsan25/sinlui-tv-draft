@@ -2,22 +2,23 @@
 
 @theme inline {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-space), var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-serif), Georgia, serif;
   --font-mono: var(--font-space), ui-monospace, monospace;
 
   --color-brand-navy: #0F2B5B;
   --color-brand-blue: #2563EB;
-  --color-brand-orange: #FF5A00;
-  --color-brand-orange-warm: #F97316;
+  --color-brand-orange: #F46F15;
+  --color-brand-orange-vivid: #FF6B00;
   --color-surface: #FFFFFF;
-  --color-surface-subtle: #F8FAFC;
-  --color-hairline: #E2E8F0;
+  --color-surface-subtle: #F6F8FC;
+  --color-hairline: rgba(15, 43, 91, 0.08);
 }
 
 @layer base {
   html {
     background-color: #FFFFFF;
-    color: #334155;
+    color: #475569;
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -25,18 +26,18 @@
 
   body {
     background-color: #FFFFFF;
-    color: #334155;
+    color: #475569;
     overflow-x: clip;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
     color: #0F2B5B;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.025em;
   }
 
   ::selection {
-    background-color: rgba(255, 90, 0, 0.14);
+    background-color: rgba(244, 111, 21, 0.14);
     color: #0F2B5B;
   }
 }
@@ -58,6 +59,18 @@ html.lenis body {
   overflow: hidden;
 }
 
+.shadow-luxury {
+  box-shadow:
+    0 24px 60px -24px rgba(15, 43, 91, 0.12),
+    0 4px 16px -4px rgba(15, 43, 91, 0.04);
+}
+
+.shadow-luxury-hover {
+  box-shadow:
+    0 32px 72px -20px rgba(15, 43, 91, 0.16),
+    0 8px 24px -6px rgba(244, 111, 21, 0.10);
+}
+
 .editorial-grain {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
 }
