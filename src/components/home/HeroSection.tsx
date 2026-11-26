@@ -31,7 +31,7 @@ export function HeroSection() {
 
   const activeMode = HERO_REEL_MODES[activeModeIndex];
 
-  // Part A: Pinned Owl Zoom-Through Portal Scroll Engine
+  // Part A: Pinned Owl Zoom-Through Portal Scroll Engine (always active on /home)
   const { scrollYProgress: portalProgress } = useScroll({
     target: portalRef,
     offset: ["start start", "end end"],
@@ -105,141 +105,90 @@ export function HeroSection() {
   return (
     <section className="relative bg-white">
       {/* Part A: Pinned Owl Zoom-Through Portal */}
-      {shouldReduceMotion ? (
-        <div className="mx-auto max-w-4xl px-4 pb-12 pt-14 text-center sm:px-6 lg:px-8">
-          <div className="mx-auto mb-6 flex justify-center">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+      <div ref={portalRef} className="relative h-[185vh]">
+        <div className="sticky top-0 flex h-screen w-full flex-col items-center justify-center overflow-hidden px-4 pt-16 sm:px-6 lg:px-8">
+          {/* Revealed Hero Content Layer */}
+          <motion.div
+            style={{
+              opacity: contentOpacity,
+              scale: contentScale,
+              y: contentY,
+            }}
+            className={cn(
+              "relative z-10 mx-auto max-w-4xl text-center",
+              contentInteractive ? "pointer-events-auto" : "pointer-events-none"
+            )}
+          >
+            <p className="inline-flex items-center gap-2 text-xs font-medium tracking-wide text-slate-500">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#F46F15]" />
+              <span>
+                Sinlui TV · Dokumentasi &amp; Penyiaran Sekolah · Periode{" "}
+                {SITE_CONFIG.period}
+              </span>
+            </p>
+
+            <h1 className="mt-5 font-display text-[2.4rem] font-semibold leading-[1.06] tracking-[-0.035em] text-[#0F2B5B] sm:text-6xl lg:text-[4.5rem]">
+              Lensa resmi yang menghidupkan
+              <br />
+              setiap{" "}
+              <span className="font-serif italic font-normal text-[#2563EB]">
+                momen
+              </span>{" "}
+              &amp;{" "}
+              <span className="font-serif italic font-normal text-[#F46F15]">
+                cerita
+              </span>{" "}
+              sekolah.
+            </h1>
+
+            <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-500 sm:text-lg">
+              Unit produksi kreatif resmi {SITE_CONFIG.schoolName} di bidang
+              fotografi, videografi, pascaproduksi, dan penyiaran langsung
+              multi-kamera dengan sentuhan sinematik.
+            </p>
+
+            <div className="mt-9 flex flex-wrap items-center justify-center gap-3.5">
+              <Link
+                href="/about"
+                className="inline-flex items-center gap-2 rounded-full bg-[#0F2B5B] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#0F2B5B]/15 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 hover:bg-[#F46F15] hover:shadow-orange-500/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F46F15] focus-visible:ring-offset-2"
+              >
+                <span>Kenali Sinlui TV</span>
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+
+              <Link
+                href="/kepengurusan"
+                className="inline-flex items-center rounded-full border border-[#0F2B5B]/12 bg-white px-7 py-3.5 text-sm font-semibold text-[#0F2B5B] shadow-xs transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 hover:border-[#0F2B5B]/30 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:ring-offset-2"
+              >
+                Susunan Kepengurusan
+              </Link>
+            </div>
+          </motion.div>
+
+          {/* Foreground Expanding & Dissolving Owl Portal */}
+          <div className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center pt-16">
+            <motion.img
               src="/images/logo-sinlui-owl-transparent.png"
               alt="Logo Resmi Sinlui TV"
-              className="h-24 w-24 object-contain"
+              style={{ scale: owlScale, opacity: owlOpacity }}
+              className="will-change-transform h-44 w-44 object-contain sm:h-60 sm:w-60 lg:h-64 lg:w-64"
             />
-          </div>
-          <p className="inline-flex items-center gap-2 text-xs font-medium tracking-wide text-slate-500">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#F46F15]" />
-            <span>
-              Sinlui TV · Dokumentasi &amp; Penyiaran Sekolah · Periode{" "}
-              {SITE_CONFIG.period}
-            </span>
-          </p>
-          <h1 className="mt-5 font-display text-[2.5rem] font-semibold leading-[1.06] tracking-[-0.035em] text-[#0F2B5B] sm:text-6xl lg:text-[4.5rem]">
-            Lensa resmi yang menghidupkan setiap{" "}
-            <span className="font-serif italic font-normal text-[#2563EB]">
-              momen
-            </span>{" "}
-            &amp;{" "}
-            <span className="font-serif italic font-normal text-[#F46F15]">
-              cerita
-            </span>{" "}
-            sekolah.
-          </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-500 sm:text-lg">
-            Unit produksi kreatif resmi {SITE_CONFIG.schoolName} di bidang
-            fotografi, videografi, pascaproduksi, dan penyiaran langsung
-            multi-kamera dengan sentuhan sinematik.
-          </p>
-          <div className="mt-9 flex flex-wrap items-center justify-center gap-3.5">
-            <Link
-              href="/about"
-              className="inline-flex items-center gap-2 rounded-full bg-[#0F2B5B] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#0F2B5B]/15 transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#F46F15]"
-            >
-              <span>Kenali Sinlui TV</span>
-              <ArrowRight className="h-4 w-4" />
-            </Link>
-            <Link
-              href="/kepengurusan"
-              className="inline-flex items-center rounded-full border border-[#0F2B5B]/12 bg-white px-7 py-3.5 text-sm font-semibold text-[#0F2B5B] shadow-xs transition-all duration-300 hover:-translate-y-0.5 hover:border-[#0F2B5B]/30"
-            >
-              Susunan Kepengurusan
-            </Link>
-          </div>
-        </div>
-      ) : (
-        <div ref={portalRef} className="relative h-[185vh]">
-          <div className="sticky top-0 flex h-[calc(100vh-80px)] min-h-[560px] w-full flex-col items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-8">
-            {/* Revealed Hero Content Layer */}
+
             <motion.div
-              style={{
-                opacity: contentOpacity,
-                scale: contentScale,
-                y: contentY,
-              }}
-              className={cn(
-                "relative z-10 mx-auto max-w-4xl text-center",
-                contentInteractive ? "pointer-events-auto" : "pointer-events-none"
-              )}
+              style={{ opacity: cueOpacity }}
+              className="mt-6 flex flex-col items-center gap-2.5 text-center"
             >
-              <p className="inline-flex items-center gap-2 text-xs font-medium tracking-wide text-slate-500">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#F46F15]" />
-                <span>
-                  Sinlui TV · Dokumentasi &amp; Penyiaran Sekolah · Periode{" "}
-                  {SITE_CONFIG.period}
-                </span>
-              </p>
-
-              <h1 className="mt-5 font-display text-[2.4rem] font-semibold leading-[1.06] tracking-[-0.035em] text-[#0F2B5B] sm:text-6xl lg:text-[4.5rem]">
-                Lensa resmi yang menghidupkan
-                <br />
-                setiap{" "}
-                <span className="font-serif italic font-normal text-[#2563EB]">
-                  momen
-                </span>{" "}
-                &amp;{" "}
-                <span className="font-serif italic font-normal text-[#F46F15]">
-                  cerita
-                </span>{" "}
-                sekolah.
-              </h1>
-
-              <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-slate-500 sm:text-lg">
-                Unit produksi kreatif resmi {SITE_CONFIG.schoolName} di bidang
-                fotografi, videografi, pascaproduksi, dan penyiaran langsung
-                multi-kamera dengan sentuhan sinematik.
-              </p>
-
-              <div className="mt-9 flex flex-wrap items-center justify-center gap-3.5">
-                <Link
-                  href="/about"
-                  className="inline-flex items-center gap-2 rounded-full bg-[#0F2B5B] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#0F2B5B]/15 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 hover:bg-[#F46F15] hover:shadow-orange-500/25 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#F46F15] focus-visible:ring-offset-2"
-                >
-                  <span>Kenali Sinlui TV</span>
-                  <ArrowRight className="h-4 w-4" />
-                </Link>
-
-                <Link
-                  href="/kepengurusan"
-                  className="inline-flex items-center rounded-full border border-[#0F2B5B]/12 bg-white px-7 py-3.5 text-sm font-semibold text-[#0F2B5B] shadow-xs transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-0.5 hover:border-[#0F2B5B]/30 hover:shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-[#2563EB] focus-visible:ring-offset-2"
-                >
-                  Susunan Kepengurusan
-                </Link>
-              </div>
+              <span className="font-display text-sm font-semibold tracking-tight text-[#0F2B5B]">
+                Sinlui <span className="text-[#F46F15]">TV</span>
+              </span>
+              <span className="text-xs font-medium tracking-wide text-slate-400">
+                Gulir perlahan untuk membuka
+              </span>
+              <span className="h-8 w-[1.5px] animate-pulse rounded-full bg-gradient-to-b from-[#F46F15] to-transparent" />
             </motion.div>
-
-            {/* Foreground Expanding & Dissolving Owl Portal */}
-            <div className="pointer-events-none absolute inset-0 z-20 flex flex-col items-center justify-center">
-              <motion.img
-                src="/images/logo-sinlui-owl-transparent.png"
-                alt="Logo Resmi Sinlui TV"
-                style={{ scale: owlScale, opacity: owlOpacity }}
-                className="will-change-transform h-44 w-44 object-contain sm:h-60 sm:w-60 lg:h-64 lg:w-64"
-              />
-
-              <motion.div
-                style={{ opacity: cueOpacity }}
-                className="mt-6 flex flex-col items-center gap-2.5 text-center"
-              >
-                <span className="font-display text-sm font-semibold tracking-tight text-[#0F2B5B]">
-                  Sinlui <span className="text-[#F46F15]">TV</span>
-                </span>
-                <span className="text-xs font-medium tracking-wide text-slate-400">
-                  Gulir perlahan untuk membuka
-                </span>
-                <span className="h-8 w-[1.5px] animate-pulse rounded-full bg-gradient-to-b from-[#F46F15] to-transparent" />
-              </motion.div>
-            </div>
           </div>
         </div>
-      )}
+      </div>
 
       {/* Part B: Grand Floating 16:9 Cinema Stage + Chapter Switcher */}
       <div
