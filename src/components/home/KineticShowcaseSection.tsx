@@ -8,8 +8,9 @@ import {
   useSpring,
   useTransform,
   useVelocity,
+  type MotionValue,
 } from "framer-motion";
-import { ArrowUpRight, Camera, Clapperboard, Quote, Radio } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import {
   BTS_MOMENTS,
   COVERAGE_HIGHLIGHTS,
@@ -20,84 +21,112 @@ import {
 } from "@/data/highlights";
 import { cn } from "@/lib/utils";
 
-function HighlightVisualArtwork({
-  variant,
-  accent,
-}: {
-  variant: CoverageHighlight["visualVariant"];
-  accent: CoverageHighlight["accent"];
-}) {
-  const isOrange = accent === "orange";
+function HighlightMediaFrame({ item }: { item: CoverageHighlight }) {
+  if (item.visualMode === "multiview") {
+    return (
+      <div className="relative grid h-48 w-full grid-cols-2 grid-rows-2 gap-0.5 overflow-hidden bg-[#0F2B5B]">
+        <div className="relative overflow-hidden">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/hero-broadcast.jpg"
+            alt="Kamera 1 Aula"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+          <span className="absolute left-1.5 top-1.5 bg-[#FF5A00] px-1.5 py-0.5 font-mono text-[9px] font-bold text-white">
+            PGM · CAM 1
+          </span>
+        </div>
+        <div className="relative overflow-hidden">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/work-stage.jpg"
+            alt="Kamera 2 Panggung"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+          <span className="absolute left-1.5 top-1.5 bg-black/60 px-1.5 py-0.5 font-mono text-[9px] text-white">
+            PVW · CAM 2
+          </span>
+        </div>
+        <div className="relative overflow-hidden">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/work-arena.jpg"
+            alt="Kamera 3 Tribun"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+          />
+          <span className="absolute left-1.5 top-1.5 bg-black/60 px-1.5 py-0.5 font-mono text-[9px] text-white">
+            AUX · CAM 3
+          </span>
+        </div>
+        <div className="flex flex-col justify-between bg-[#0F2B5B] p-2.5 text-white">
+          <div className="flex items-center justify-between font-mono text-[9px] text-blue-200">
+            <span>SWITCHER</span>
+            <span className="text-[#FF5A00]">1080p60</span>
+          </div>
+          <div className="flex items-end gap-1">
+            {[45, 75, 60, 90, 50, 80, 65, 95].map((pct, i) => (
+              <span
+                key={i}
+                style={{ height: `${Math.round(pct * 0.28)}px` }}
+                className={cn(
+                  "w-1.5 rounded-xs",
+                  i >= 6 ? "bg-[#FF5A00]" : "bg-[#2563EB]"
+                )}
+              />
+            ))}
+          </div>
+          <span className="font-mono text-[9px] uppercase tracking-wider text-blue-100">
+            AUDIO SYNC LOCKED
+          </span>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div
-      className={cn(
-        "relative flex h-36 w-full items-end justify-between overflow-hidden rounded-xl border p-4",
-        isOrange
-          ? "border-orange-200/70 bg-gradient-to-br from-orange-50 via-white to-blue-50"
-          : "border-blue-200/70 bg-gradient-to-br from-blue-50 via-white to-slate-50"
-      )}
-    >
-      {/* Subtle geometric studio graphic */}
-      <svg
-        viewBox="0 0 280 110"
-        fill="none"
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 h-full w-full opacity-75"
+    <div className="relative h-48 w-full overflow-hidden bg-slate-100">
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={item.image}
+        alt={item.title}
+        className={cn(
+          "h-full w-full object-cover transition-transform duration-500 group-hover:scale-105",
+          item.visualMode === "colorgrade" ? "contrast-[1.06] saturate-[1.08]" : ""
+        )}
+      />
+
+      {/* Cinematic Letterbox bars for slow-mo highlight */}
+      {item.visualMode === "letterbox" ? (
+        <>
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-3.5 bg-[#0F2B5B]" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 flex h-5 items-center justify-between bg-[#0F2B5B] px-3 font-mono text-[9px] text-blue-100">
+            <span>2.39:1 ANAMORPHIC</span>
+            <span className="text-[#FF5A00]">120 FPS</span>
+          </div>
+        </>
+      ) : null}
+
+      {/* Color grade LUT reference bar */}
+      {item.visualMode === "colorgrade" ? (
+        <div className="pointer-events-none absolute inset-x-3 bottom-3 flex items-center justify-between rounded-sm bg-[#0F2B5B]/85 px-2.5 py-1 font-mono text-[9px] text-white backdrop-blur-sm">
+          <span>REC.709 · SINLUI LUT v2</span>
+          <div className="flex items-center gap-1">
+            <span className="h-2 w-2 rounded-xs bg-[#0F2B5B] ring-1 ring-white/40" />
+            <span className="h-2 w-2 rounded-xs bg-[#2563EB]" />
+            <span className="h-2 w-2 rounded-xs bg-[#FF5A00]" />
+            <span className="h-2 w-2 rounded-xs bg-white" />
+          </div>
+        </div>
+      ) : null}
+
+      {/* Top Left Category Pill */}
+      <span
+        className={cn(
+          "absolute left-3 top-3 rounded-sm px-2.5 py-1 font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-white backdrop-blur-md",
+          item.accent === "orange" ? "bg-[#FF5A00]/90" : "bg-[#0F2B5B]/85"
+        )}
       >
-        <circle
-          cx="230"
-          cy="28"
-          r="54"
-          stroke={isOrange ? "#F97316" : "#2563EB"}
-          strokeOpacity="0.16"
-          strokeWidth="1.5"
-        />
-        <circle
-          cx="230"
-          cy="28"
-          r="32"
-          stroke="#0F2B5B"
-          strokeOpacity="0.12"
-          strokeWidth="1.5"
-          strokeDasharray="4 4"
-        />
-        {variant === "broadcast" || variant === "stage" ? (
-          <path
-            d="M16 78 Q 62 36, 108 72 T 204 54 T 268 68"
-            stroke={isOrange ? "#F97316" : "#2563EB"}
-            strokeOpacity="0.35"
-            strokeWidth="2"
-          />
-        ) : (
-          <path
-            d="M20 82 L 74 44 L 122 68 L 180 28 L 260 76"
-            stroke={isOrange ? "#F97316" : "#2563EB"}
-            strokeOpacity="0.28"
-            strokeWidth="2"
-          />
-        )}
-      </svg>
-
-      {/* Viewfinder Corners */}
-      <span className="relative z-10 inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-white/90 px-2.5 py-1 font-mono text-[10px] font-semibold text-[#0F2B5B] shadow-xs">
-        <span
-          className={cn(
-            "h-1.5 w-1.5 rounded-full",
-            isOrange ? "bg-[#F97316]" : "bg-[#2563EB]"
-          )}
-        />
-        REC ARCHIVE
-      </span>
-
-      <span className="relative z-10 flex h-8 w-8 items-center justify-center rounded-lg border border-slate-200 bg-white/90 text-[#0F2B5B] shadow-xs">
-        {variant === "broadcast" ? (
-          <Radio className="h-4 w-4 text-[#F97316]" />
-        ) : variant === "arena" ? (
-          <Camera className="h-4 w-4 text-[#2563EB]" />
-        ) : (
-          <Clapperboard className="h-4 w-4 text-[#0F2B5B]" />
-        )}
+        {item.category} · {item.year}
       </span>
     </div>
   );
@@ -109,59 +138,49 @@ function HighlightCard({ item }: { item: CoverageHighlight }) {
   return (
     <article
       className={cn(
-        "group relative flex w-[320px] shrink-0 flex-col justify-between rounded-2xl border border-slate-200 bg-white p-4 shadow-sm transition-all duration-300 sm:w-[370px] sm:p-5",
-        "hover:-translate-y-1.5 hover:shadow-lg",
+        "group relative flex w-[340px] shrink-0 flex-col justify-between overflow-hidden rounded-xl border border-slate-200/90 bg-white transition-all duration-300 sm:w-[420px]",
+        "hover:-translate-y-1 hover:shadow-xl",
         isOrange
-          ? "hover:border-[#F97316] hover:shadow-orange-500/10"
-          : "hover:border-[#2563EB] hover:shadow-blue-500/10"
+          ? "hover:border-[#FF5A00] hover:shadow-[#0F2B5B]/10"
+          : "hover:border-[#2563EB] hover:shadow-[#0F2B5B]/10"
       )}
     >
       <div>
-        <HighlightVisualArtwork
-          variant={item.visualVariant}
-          accent={item.accent}
-        />
+        <HighlightMediaFrame item={item} />
 
-        <div className="mt-4 flex items-center justify-between gap-2">
-          <span
-            className={cn(
-              "rounded-full px-2.5 py-0.5 text-[11px] font-semibold",
-              isOrange
-                ? "bg-orange-50 text-[#F97316]"
-                : "bg-blue-50 text-[#2563EB]"
-            )}
-          >
-            {item.category}
-          </span>
-          <span className="font-mono text-[11px] text-slate-400">
-            {item.year} · {item.durationOrCount}
-          </span>
+        <div className="p-5 sm:p-6">
+          <div className="flex items-center justify-between font-mono text-[11px] text-slate-400">
+            <span>{item.specs}</span>
+            <span className="font-semibold text-[#0F2B5B]">
+              {item.durationOrCount}
+            </span>
+          </div>
+
+          <h3 className="mt-2 font-display text-xl font-bold leading-snug text-[#0F2B5B]">
+            {item.title}
+          </h3>
+          <p className="mt-2 text-sm leading-relaxed text-slate-600">
+            {item.summary}
+          </p>
         </div>
-
-        <h3 className="mt-2.5 font-display text-lg font-bold leading-snug text-[#0F2B5B]">
-          {item.title}
-        </h3>
-        <p className="mt-2 text-xs leading-relaxed text-slate-600 sm:text-sm">
-          {item.summary}
-        </p>
       </div>
 
-      {/* Interactive Hover Detail Strip */}
-      <div className="mt-4 border-t border-slate-100 pt-3">
-        <div className="flex items-center justify-between gap-2">
-          <span className="font-mono text-[11px] font-medium text-slate-500">
-            {item.specs}
+      {/* Hover Detail Reveal Footer */}
+      <div className="border-t border-slate-100 px-5 py-3.5 sm:px-6">
+        <div className="flex items-center justify-between text-xs">
+          <span className="font-mono text-[11px] text-slate-400">
+            ARSIP PRODUKSI
           </span>
           <ArrowUpRight
             className={cn(
               "h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5",
               isOrange
-                ? "text-slate-400 group-hover:text-[#F97316]"
+                ? "text-slate-400 group-hover:text-[#FF5A00]"
                 : "text-slate-400 group-hover:text-[#2563EB]"
             )}
           />
         </div>
-        <p className="mt-1.5 max-h-0 overflow-hidden text-[11px] text-[#0F2B5B] opacity-0 transition-all duration-300 group-hover:max-h-12 group-hover:opacity-100">
+        <p className="max-h-0 overflow-hidden text-xs font-medium text-[#0F2B5B] opacity-0 transition-all duration-300 group-hover:mt-1.5 group-hover:max-h-14 group-hover:opacity-100">
           {item.detailNote}
         </p>
       </div>
@@ -169,61 +188,67 @@ function HighlightCard({ item }: { item: CoverageHighlight }) {
   );
 }
 
-function TestimonialCard({ item }: { item: TestimonialItem }) {
+function TestimonialCard({
+  item,
+  index,
+  progress,
+  reducedMotion,
+}: {
+  item: TestimonialItem;
+  index: number;
+  progress: MotionValue<number>;
+  reducedMotion: boolean | null;
+}) {
   const isOrange = item.accent === "orange";
+  const direction = index % 2 === 0 ? 1 : -1;
+  const rotate = useTransform(
+    progress,
+    [0, 0.5, 1],
+    [1.1 * direction, 0, -1.1 * direction]
+  );
 
   return (
-    <article
+    <motion.article
+      style={reducedMotion ? undefined : { rotate }}
       className={cn(
-        "group relative flex w-[310px] shrink-0 flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all duration-300 sm:w-[350px] sm:p-6",
-        "hover:-translate-y-1.5 hover:shadow-lg",
+        "group relative flex w-[330px] shrink-0 flex-col justify-between rounded-xl border border-slate-200/90 bg-white p-6 transition-all duration-300 sm:w-[400px] sm:p-7",
+        "hover:-translate-y-1 hover:shadow-xl",
         isOrange
-          ? "hover:border-[#F97316] hover:shadow-orange-500/10"
-          : "hover:border-[#2563EB] hover:shadow-blue-500/10"
+          ? "hover:border-[#FF5A00] hover:shadow-[#0F2B5B]/10"
+          : "hover:border-[#2563EB] hover:shadow-[#0F2B5B]/10"
       )}
     >
       <div>
-        <div className="flex items-center justify-between">
-          <Quote
-            className={cn(
-              "h-6 w-6",
-              isOrange ? "text-[#F97316]" : "text-[#2563EB]"
-            )}
-          />
-          <span
-            className={cn(
-              "rounded-full border px-2.5 py-0.5 font-mono text-[10px] font-semibold uppercase tracking-wide transition-colors",
-              isOrange
-                ? "border-orange-200 bg-orange-50/70 text-[#F97316]"
-                : "border-blue-200 bg-blue-50/70 text-[#2563EB]"
-            )}
-          >
+        <div className="flex items-center justify-between border-b border-slate-100 pb-3.5 font-mono text-[11px] uppercase tracking-[0.14em]">
+          <span className={isOrange ? "text-[#FF5A00]" : "text-[#2563EB]"}>
             {item.event}
           </span>
+          <span className="text-slate-400">0{index + 1}</span>
         </div>
 
-        <p className="mt-4 text-sm leading-relaxed text-slate-700">
+        <p className="mt-5 font-display text-[17px] font-medium leading-relaxed text-[#0F2B5B]">
           &ldquo;{item.quote}&rdquo;
         </p>
       </div>
 
-      <div className="mt-5 flex items-center gap-3 border-t border-slate-100 pt-4">
-        <div
-          className={cn(
-            "flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-display text-xs font-bold text-white",
-            isOrange ? "bg-[#F97316]" : "bg-[#0F2B5B]"
-          )}
-        >
-          {item.initials}
-        </div>
+      <div className="mt-6 flex items-center justify-between gap-3 border-t border-slate-100 pt-4">
         <div className="min-w-0">
           <p className="truncate font-display text-sm font-bold text-[#0F2B5B]">
             {item.author}
           </p>
           <p className="truncate text-xs text-slate-500">{item.role}</p>
         </div>
+
+        <span
+          className={cn(
+            "flex h-9 w-9 shrink-0 items-center justify-center rounded-md font-mono text-xs font-bold text-white",
+            isOrange ? "bg-[#FF5A00]" : "bg-[#0F2B5B]"
+          )}
+        >
+          {item.initials}
+        </span>
       </div>
-    </article>
+    </motion.article>
   );
 }
 
@@ -233,24 +258,20 @@ function BtsCard({ item }: { item: BtsMoment }) {
   return (
     <article
       className={cn(
-        "group relative flex w-[285px] shrink-0 flex-col justify-between rounded-2xl border border-slate-200 bg-slate-50/80 p-4 transition-all duration-300 hover:bg-white sm:w-[320px] sm:p-5",
-        "hover:-translate-y-1.5 hover:shadow-lg",
+        "group relative flex w-[290px] shrink-0 flex-col justify-between rounded-lg border border-slate-200/90 bg-white p-5 transition-all duration-300 sm:w-[340px]",
+        "hover:-translate-y-1 hover:shadow-lg",
         isOrange
-          ? "hover:border-[#F97316] hover:shadow-orange-500/10"
-          : "hover:border-[#2563EB] hover:shadow-blue-500/10"
+          ? "hover:border-[#FF5A00] hover:shadow-[#0F2B5B]/10"
+          : "hover:border-[#2563EB] hover:shadow-[#0F2B5B]/10"
       )}
     >
       <div>
-        <div className="flex items-center justify-between gap-2">
-          <span className="font-mono text-[11px] font-semibold text-slate-400">
-            {item.timecode}
-          </span>
+        <div className="flex items-center justify-between font-mono text-[11px]">
+          <span className="text-slate-400">{item.timecode}</span>
           <span
             className={cn(
-              "rounded-md px-2 py-0.5 text-[11px] font-semibold",
-              isOrange
-                ? "bg-orange-100/70 text-[#F97316]"
-                : "bg-blue-100/70 text-[#2563EB]"
+              "font-semibold uppercase tracking-wider",
+              isOrange ? "text-[#FF5A00]" : "text-[#2563EB]"
             )}
           >
             {item.division}
@@ -265,15 +286,10 @@ function BtsCard({ item }: { item: BtsMoment }) {
         </p>
       </div>
 
-      <div className="mt-4 flex items-center justify-between border-t border-slate-200/70 pt-3 font-mono text-[11px]">
-        <span className="text-[#0F2B5B]">{item.gearTag}</span>
-        <span
-          className={cn(
-            "opacity-0 transition-opacity duration-200 group-hover:opacity-100",
-            isOrange ? "text-[#F97316]" : "text-[#2563EB]"
-          )}
-        >
-          BTS LOG
+      <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3 font-mono text-[11px] text-slate-500">
+        <span>{item.gearTag}</span>
+        <span className="text-[#0F2B5B] opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+          LOG OK
         </span>
       </div>
     </article>
@@ -299,6 +315,7 @@ export function KineticShowcaseSection() {
   const rawSkew = useTransform(scrollVelocity, [-2400, 0, 2400], [-2, 0, 2]);
   const smoothSkew = useSpring(rawSkew, { stiffness: 180, damping: 28 });
 
+  const watermarkX = useTransform(smoothProgress, [0, 1], ["-8%", "10%"]);
   const row1X = useTransform(smoothProgress, [0, 1], ["4%", "-24%"]);
   const row2X = useTransform(smoothProgress, [0, 1], ["-22%", "4%"]);
   const row3X = useTransform(smoothProgress, [0, 1], ["8%", "-28%"]);
@@ -306,57 +323,63 @@ export function KineticShowcaseSection() {
   return (
     <section
       ref={sectionRef}
-      aria-label="Highlight Liputan dan Testimoni"
-      className="relative overflow-x-clip border-b border-slate-200/80 bg-white py-20 sm:py-24"
+      aria-label="Showcase Karya, Testimoni, dan Behind The Scenes"
+      className="relative overflow-x-clip border-b border-slate-200 bg-[#F8FAFC] py-20 sm:py-28"
     >
-      {/* Top Editorial Header + Scroll Progress Track */}
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50/70 px-3 py-1 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-[#2563EB]">
-              <span>Showcase Karya &amp; Kata Mereka</span>
-            </div>
-            <h2 className="mt-3 font-display text-3xl font-extrabold tracking-tight text-[#0F2B5B] sm:text-4xl">
-              Bergerak Mengikuti Ritme Momen Sekolah
-            </h2>
-            <p className="mt-3 text-sm leading-relaxed text-slate-600 sm:text-base">
-              Gulir halaman untuk menelusuri arsip highlight liputan, testimoni
-              panitia serta guru, dan catatan di balik layar produksi Sinlui TV.
+      {/* Monumental Low-Contrast Background Watermark */}
+      {!shouldReduceMotion ? (
+        <motion.div
+          style={{ x: watermarkX }}
+          aria-hidden="true"
+          className="pointer-events-none absolute top-14 whitespace-nowrap font-display text-[6rem] font-bold uppercase tracking-[-0.04em] text-[#0F2B5B]/[0.03] sm:text-[9rem]"
+        >
+          SINLUI TV ARCHIVE · KATA MEREKA · BEHIND THE LENS · SINLUI TV ARCHIVE
+        </motion.div>
+      ) : null}
+
+      {/* Editorial Header */}
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-12 lg:items-end">
+          <div className="lg:col-span-7">
+            <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-[#FF5A00]">
+              02 / ARSIP KARYA &amp; KATA MEREKA
             </p>
+            <h2 className="mt-2 font-display text-3xl font-bold tracking-[-0.035em] text-[#0F2B5B] sm:text-5xl">
+              Karya yang Bergerak Bersama Momen.
+            </h2>
           </div>
 
-          <div className="w-full max-w-xs">
-            <div className="flex items-center justify-between font-mono text-[11px] text-slate-500">
-              <span>SCROLL TIMELINE</span>
-              <span className="text-[#F97316]">LIVE SCRUB</span>
-            </div>
-            <div className="mt-2 h-1.5 w-full overflow-hidden rounded-full bg-slate-100">
-              <motion.div
-                style={{
-                  scaleX: shouldReduceMotion ? 1 : smoothProgress,
-                }}
-                className="h-full origin-left rounded-full bg-gradient-to-r from-[#0F2B5B] via-[#2563EB] to-[#F97316]"
-              />
+          <div className="lg:col-span-5">
+            <p className="text-sm leading-relaxed text-slate-600">
+              Gulir halaman untuk menelusuri highlight liputan, tanggapan
+              panitia dan guru, serta log kru di balik layar.
+            </p>
+            <div className="mt-4 flex items-center gap-3">
+              <div className="h-[2px] flex-1 overflow-hidden bg-slate-200">
+                <motion.div
+                  style={{ scaleX: shouldReduceMotion ? 1 : smoothProgress }}
+                  className="h-full origin-left bg-[#FF5A00]"
+                />
+              </div>
+              <span className="font-mono text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+                SCROLL SCRUB
+              </span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Kinetic Multi-Row Horizontal Tracks */}
-      <div className="mt-12 space-y-6 sm:space-y-8">
+      {/* 3 Opposing Kinetic Scroll Tracks */}
+      <div className="relative z-10 mt-14 space-y-8 sm:space-y-10">
         {/* Row 1: Highlight Liputan (Right -> Left) */}
         <div>
-          <div className="mx-auto mb-3 flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-            <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.15em] text-slate-400">
-              01 / Highlight Liputan &amp; Karya
-            </span>
-            <span className="hidden font-mono text-[11px] text-slate-400 sm:inline">
-              ← Bergerak ke kiri saat scroll
-            </span>
+          <div className="mx-auto mb-3 flex max-w-7xl items-center justify-between px-4 font-mono text-[11px] uppercase tracking-[0.14em] text-slate-400 sm:px-6 lg:px-8">
+            <span>01 — HIGHLIGHT LIPUTAN &amp; PRODUKSI</span>
+            <span className="hidden sm:inline">← SCROLL KIRI</span>
           </div>
 
           {shouldReduceMotion ? (
-            <div className="flex snap-x gap-4 overflow-x-auto px-4 pb-2 sm:px-6 lg:px-8">
+            <div className="flex snap-x gap-5 overflow-x-auto px-4 pb-2 sm:px-6 lg:px-8">
               {COVERAGE_HIGHLIGHTS.map((item) => (
                 <HighlightCard key={item.id} item={item} />
               ))}
@@ -373,21 +396,25 @@ export function KineticShowcaseSection() {
           )}
         </div>
 
-        {/* Row 2: Testimoni (Left -> Right, opposite direction) */}
+        {/* Row 2: Kata Mereka (Left -> Right) */}
         <div>
-          <div className="mx-auto mb-3 flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-            <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.15em] text-[#2563EB]">
-              02 / Kata Mereka — Panitia, Pembina &amp; Guru
-            </span>
-            <span className="hidden font-mono text-[11px] text-slate-400 sm:inline">
-              Bergerak berlawanan arah →
+          <div className="mx-auto mb-3 flex max-w-7xl items-center justify-between px-4 font-mono text-[11px] uppercase tracking-[0.14em] text-[#2563EB] sm:px-6 lg:px-8">
+            <span>02 — KATA MEREKA (PANITIA, PEMBINA &amp; GURU)</span>
+            <span className="hidden text-slate-400 sm:inline">
+              SCROLL KANAN →
             </span>
           </div>
 
           {shouldReduceMotion ? (
-            <div className="flex snap-x gap-4 overflow-x-auto px-4 pb-2 sm:px-6 lg:px-8">
-              {TESTIMONIALS.map((item) => (
-                <TestimonialCard key={item.id} item={item} />
+            <div className="flex snap-x gap-5 overflow-x-auto px-4 pb-2 sm:px-6 lg:px-8">
+              {TESTIMONIALS.map((item, idx) => (
+                <TestimonialCard
+                  key={item.id}
+                  item={item}
+                  index={idx}
+                  progress={smoothProgress}
+                  reducedMotion={shouldReduceMotion}
+                />
               ))}
             </div>
           ) : (
@@ -395,26 +422,30 @@ export function KineticShowcaseSection() {
               style={{ x: row2X, skewX: smoothSkew }}
               className="will-change-transform flex gap-5 px-4 sm:px-8"
             >
-              {TESTIMONIALS.map((item) => (
-                <TestimonialCard key={item.id} item={item} />
+              {TESTIMONIALS.map((item, idx) => (
+                <TestimonialCard
+                  key={item.id}
+                  item={item}
+                  index={idx}
+                  progress={smoothProgress}
+                  reducedMotion={shouldReduceMotion}
+                />
               ))}
             </motion.div>
           )}
         </div>
 
-        {/* Row 3: Behind The Scenes (Right -> Left, faster parallax) */}
+        {/* Row 3: Contact-Sheet BTS (Right -> Left, faster parallax) */}
         <div>
-          <div className="mx-auto mb-3 flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-            <span className="font-mono text-[11px] font-semibold uppercase tracking-[0.15em] text-[#F97316]">
-              03 / Momen Balik Layar (BTS Log)
-            </span>
-            <span className="hidden font-mono text-[11px] text-slate-400 sm:inline">
-              Arahkan kursor untuk sorotan detail
+          <div className="mx-auto mb-3 flex max-w-7xl items-center justify-between px-4 font-mono text-[11px] uppercase tracking-[0.14em] text-[#FF5A00] sm:px-6 lg:px-8">
+            <span>03 — CATATAN BALIK LAYAR (BTS CONTACT SHEET)</span>
+            <span className="hidden text-slate-400 sm:inline">
+              HOVER UNTUK DETAIL
             </span>
           </div>
 
           {shouldReduceMotion ? (
-            <div className="flex snap-x gap-4 overflow-x-auto px-4 pb-2 sm:px-6 lg:px-8">
+            <div className="flex snap-x gap-5 overflow-x-auto px-4 pb-2 sm:px-6 lg:px-8">
               {BTS_MOMENTS.map((item) => (
                 <BtsCard key={item.id} item={item} />
               ))}

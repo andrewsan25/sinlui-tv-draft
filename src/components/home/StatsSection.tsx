@@ -35,23 +35,31 @@ function CountUpNumber({ value, suffix }: { value: number; suffix: string }) {
   return (
     <span ref={ref} className="tabular-nums">
       {formatted}
-      {suffix ? <span className="text-[#F97316]">{suffix}</span> : null}
+      {suffix ? <span className="text-[#FF5A00]">{suffix}</span> : null}
     </span>
   );
 }
 
-function StatCard({ stat }: { stat: StatItem }) {
+function StatCell({ stat }: { stat: StatItem }) {
   return (
-    <div className="group rounded-2xl border border-slate-200/90 bg-white p-6 transition-all duration-200 hover:-translate-y-0.5 hover:border-[#2563EB]/40 hover:shadow-md hover:shadow-blue-500/5">
-      <div className="font-display text-3xl font-extrabold tracking-tight text-[#0F2B5B] sm:text-4xl">
+    <div className="flex flex-col justify-between p-7 transition-colors duration-200 hover:bg-[#F8FAFC] sm:p-10">
+      <div className="flex items-center justify-between font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-400">
+        <span>{stat.index}</span>
+        <span className="h-1.5 w-1.5 rounded-full bg-[#2563EB]/30" />
+      </div>
+
+      <div className="mt-6 font-display text-5xl font-bold tracking-[-0.04em] text-[#0F2B5B] lg:text-[3.75rem]">
         <CountUpNumber value={stat.value} suffix={stat.suffix} />
       </div>
-      <p className="mt-2 font-display text-sm font-bold text-[#0F2B5B]">
-        {stat.label}
-      </p>
-      <p className="mt-1 text-xs leading-relaxed text-slate-500">
-        {stat.sublabel}
-      </p>
+
+      <div className="mt-4">
+        <p className="font-display text-base font-bold text-[#0F2B5B]">
+          {stat.label}
+        </p>
+        <p className="mt-1 text-xs leading-relaxed text-slate-500">
+          {stat.sublabel}
+        </p>
+      </div>
     </div>
   );
 }
@@ -59,27 +67,13 @@ function StatCard({ stat }: { stat: StatItem }) {
 export function StatsSection() {
   return (
     <section
-      aria-label="Statistik Sinlui TV"
-      className="border-b border-slate-200/80 bg-[#F8FAFC] py-12 sm:py-16"
+      aria-label="Rekam Jejak Angka Sinlui TV"
+      className="border-b border-slate-200 bg-white"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
-          <div>
-            <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[#2563EB]">
-              Sekilas Angka
-            </p>
-            <h2 className="mt-1 font-display text-2xl font-bold text-[#0F2B5B] sm:text-3xl">
-              Rekam Jejak Produksi &amp; Kolaborasi
-            </h2>
-          </div>
-          <p className="text-xs text-slate-500 sm:text-sm">
-            Terus bertumbuh bersama setiap agenda akademik, seni, dan olahraga.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid grid-cols-1 divide-y divide-slate-200 sm:grid-cols-2 sm:divide-x lg:grid-cols-4 lg:divide-y-0">
           {HOME_STATS.map((stat) => (
-            <StatCard key={stat.id} stat={stat} />
+            <StatCell key={stat.id} stat={stat} />
           ))}
         </div>
       </div>

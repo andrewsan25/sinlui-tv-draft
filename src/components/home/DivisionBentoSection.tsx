@@ -11,98 +11,116 @@ export function DivisionBentoSection() {
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <section className="border-b border-slate-200/80 bg-[#F8FAFC] py-20 sm:py-24">
+    <section className="bg-white py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
+        <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
           <div className="max-w-2xl">
-            <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[#F97316]">
-              Ekosistem Produksi
+            <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-[#2563EB]">
+              03 / EKOSISTEM PRODUKSI
             </p>
-            <h2 className="mt-1.5 font-display text-3xl font-extrabold text-[#0F2B5B] sm:text-4xl">
-              Lima Divisi yang Saling Terhubung
+            <h2 className="mt-2 font-display text-3xl font-bold tracking-[-0.035em] text-[#0F2B5B] sm:text-5xl">
+              Lima Divisi Terstruktur.
             </h2>
-            <p className="mt-2.5 text-sm leading-relaxed text-slate-600 sm:text-base">
-              Setiap hasil dokumentasi dan siaran langsung lahir dari kolaborasi
-              lima divisi spesialis dengan peran yang jelas.
-            </p>
           </div>
 
           <Link
             href="/about#divisi"
-            className="inline-flex items-center gap-1.5 self-start rounded-full border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-[#0F2B5B] transition-colors hover:border-[#F97316] hover:text-[#F97316] sm:self-auto"
+            className="group inline-flex items-center gap-1.5 self-start border-b border-[#0F2B5B]/30 pb-1 text-sm font-semibold text-[#0F2B5B] transition-colors hover:border-[#FF5A00] hover:text-[#FF5A00] sm:self-auto"
           >
-            <span>Detail Semua Divisi</span>
-            <ArrowRight className="h-3.5 w-3.5" />
+            <span>Eksplorasi Semua Divisi</span>
+            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" />
           </Link>
         </div>
 
-        <div className="mt-10 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-12">
+        {/* Architectural Hairline Bento Matrix */}
+        <div className="mt-12 grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-slate-200 bg-slate-200 md:grid-cols-2 lg:grid-cols-12">
           {DIVISIONS.map((division, idx) => {
-            const isOrange = division.accent === "orange";
+            const isVideografi = division.id === "videografi";
 
             return (
               <motion.div
                 key={division.id}
                 initial={
-                  shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 18 }
+                  shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 12 }
                 }
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-40px" }}
                 transition={{
-                  duration: 0.45,
-                  delay: shouldReduceMotion ? 0 : idx * 0.06,
+                  duration: 0.4,
+                  delay: shouldReduceMotion ? 0 : idx * 0.05,
                   ease: [0.22, 1, 0.36, 1],
                 }}
                 className={cn(
-                  "group relative flex flex-col justify-between rounded-3xl border border-slate-200 bg-white p-6 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg",
-                  isOrange
-                    ? "hover:border-[#F97316]/70 hover:shadow-orange-500/10"
-                    : "hover:border-[#2563EB]/60 hover:shadow-blue-500/10",
+                  "group relative flex flex-col justify-between bg-white p-7 transition-colors duration-200 hover:bg-[#F8FAFC] sm:p-8",
                   division.bentoSpan
                 )}
               >
+                {/* Hover top hairline reveal */}
+                <span
+                  aria-hidden="true"
+                  className="absolute inset-x-0 top-0 h-[2px] origin-left scale-x-0 bg-[#FF5A00] transition-transform duration-300 group-hover:scale-x-100"
+                />
+
                 <div>
-                  <div className="flex items-start justify-between gap-3">
-                    <span
-                      className={cn(
-                        "flex h-11 w-11 items-center justify-center rounded-2xl border",
-                        isOrange
-                          ? "border-orange-200 bg-orange-50 text-[#F97316]"
-                          : "border-blue-200 bg-blue-50 text-[#2563EB]"
-                      )}
-                    >
-                      <DivisionIcon iconKey={division.iconKey} />
-                    </span>
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <span className="font-mono text-xs font-bold text-[#FF5A00]">
+                        {division.index}
+                      </span>
+                      <DivisionIcon
+                        iconKey={division.iconKey}
+                        className="h-4 w-4 text-[#0F2B5B]"
+                      />
+                    </div>
 
                     <Link
                       href={`/about#divisi-${division.id}`}
-                      aria-label={`Pelajari divisi ${division.name}`}
-                      className="flex h-8 w-8 items-center justify-center rounded-full border border-slate-200 text-slate-400 transition-colors group-hover:border-[#0F2B5B] group-hover:text-[#0F2B5B]"
+                      aria-label={`Detail divisi ${division.name}`}
+                      className="text-slate-400 transition-colors group-hover:text-[#FF5A00]"
                     >
-                      <ArrowUpRight className="h-4 w-4" />
+                      <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                     </Link>
                   </div>
 
-                  <h3 className="mt-5 font-display text-xl font-bold text-[#0F2B5B]">
-                    {division.name}
-                  </h3>
-                  <p className="mt-1.5 text-sm font-medium text-[#2563EB]">
-                    {division.tagline}
-                  </p>
-                  <p className="mt-2.5 text-sm leading-relaxed text-slate-600">
-                    {division.description}
-                  </p>
+                  {isVideografi ? (
+                    <div className="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-12 sm:items-center">
+                      <div className="sm:col-span-7">
+                        <h3 className="font-display text-2xl font-bold text-[#0F2B5B]">
+                          {division.name}
+                        </h3>
+                        <p className="mt-1.5 text-sm font-medium text-[#2563EB]">
+                          {division.tagline}
+                        </p>
+                        <p className="mt-3 text-sm leading-relaxed text-slate-600">
+                          {division.description}
+                        </p>
+                      </div>
+                      <div className="overflow-hidden rounded-lg border border-slate-200 sm:col-span-5">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={division.image}
+                          alt={division.name}
+                          className="aspect-[16/10] w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                        />
+                      </div>
+                    </div>
+                  ) : (
+                    <>
+                      <h3 className="mt-6 font-display text-2xl font-bold text-[#0F2B5B]">
+                        {division.name}
+                      </h3>
+                      <p className="mt-1.5 text-sm font-medium text-[#2563EB]">
+                        {division.tagline}
+                      </p>
+                      <p className="mt-3 text-sm leading-relaxed text-slate-600">
+                        {division.description}
+                      </p>
+                    </>
+                  )}
                 </div>
 
-                <div className="mt-6 flex flex-wrap gap-1.5 border-t border-slate-100 pt-4">
-                  {division.tools.map((tool) => (
-                    <span
-                      key={tool}
-                      className="rounded-full border border-slate-200 bg-slate-50 px-2.5 py-0.5 font-mono text-[11px] font-medium text-slate-600"
-                    >
-                      {tool}
-                    </span>
-                  ))}
+                <div className="mt-8 border-t border-slate-100 pt-4 font-mono text-[11px] text-slate-400">
+                  {division.tools.join(" · ")}
                 </div>
               </motion.div>
             );

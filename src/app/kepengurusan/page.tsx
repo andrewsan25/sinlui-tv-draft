@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import { PageTransition } from "@/components/layout/PageTransition";
 import { OrgDirectory } from "@/components/kepengurusan/OrgDirectory";
-import { PERIODE_AKTIF } from "@/data/kepengurusan";
+import { MEMBERS, PERIODE_AKTIF } from "@/data/kepengurusan";
 
 export const metadata: Metadata = {
   title: "Kepengurusan",
@@ -13,45 +13,37 @@ export const metadata: Metadata = {
 export default function KepengurusanPage() {
   return (
     <PageTransition>
-      {/* Editorial Header */}
-      <section className="border-b border-slate-200/80 bg-white bg-editorial-grid py-14 sm:py-20">
+      {/* Editorial Roster Masthead */}
+      <section className="border-b border-slate-200 bg-white pb-12 pt-10 sm:pb-16 sm:pt-14">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <nav
             aria-label="Breadcrumb"
-            className="flex items-center gap-1.5 font-mono text-xs text-slate-500"
+            className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.14em] text-slate-400"
           >
             <Link href="/home" className="hover:text-[#0F2B5B]">
               Home
             </Link>
-            <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-            <span className="font-semibold text-[#F97316]">Kepengurusan</span>
+            <ChevronRight className="h-3.5 w-3.5" />
+            <span className="font-semibold text-[#FF5A00]">Kepengurusan</span>
           </nav>
 
-          <div className="mt-5 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-            <div className="max-w-3xl">
-              <span className="inline-flex items-center gap-2 rounded-full border border-orange-200 bg-orange-50 px-3.5 py-1 font-mono text-[11px] font-semibold uppercase tracking-[0.14em] text-[#F97316]">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#F97316]" />
-                PERIODE {PERIODE_AKTIF}
-              </span>
-              <h1 className="mt-4 font-display text-3xl font-extrabold leading-[1.12] tracking-tight text-[#0F2B5B] sm:text-5xl">
-                Susunan Kepengurusan Sinlui TV
-              </h1>
-              <p className="mt-4 text-base leading-relaxed text-slate-600 sm:text-lg">
-                Sinergi Badan Pengurus Harian (BPH), koordinator, dan kru aktif
-                lintas lima divisi yang menjaga kualitas liputan dan penyiaran
-                sekolah sepanjang periode {PERIODE_AKTIF}.
+          <div className="mt-6 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:items-end">
+            <div className="lg:col-span-8">
+              <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-[#FF5A00]">
+                PERIODE AKTIF {PERIODE_AKTIF}
               </p>
+              <h1 className="mt-3 font-display text-4xl font-bold uppercase leading-[0.96] tracking-[-0.045em] text-[#0F2B5B] sm:text-6xl">
+                SUSUNAN KEPENGURUSAN
+              </h1>
             </div>
 
-            <div className="rounded-2xl border border-slate-200 bg-white px-5 py-3.5 shadow-xs">
-              <p className="font-mono text-[10px] font-semibold uppercase tracking-widest text-slate-400">
-                STRUKTUR DATA TERPISAH
+            <div className="lg:col-span-4 lg:text-right">
+              <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-slate-400">
+                {MEMBERS.length} PERSONEL · 06 BPH · 05 DIVISI
               </p>
-              <p className="mt-1 text-xs font-medium text-[#0F2B5B]">
-                Kelola anggota di{" "}
-                <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-[11px] text-[#2563EB]">
-                  src/data/kepengurusan.ts
-                </code>
+              <p className="mt-2 text-sm leading-relaxed text-slate-600">
+                Pimpinan harian, koordinator, dan kru aktif yang menggerakkan
+                produksi dokumentasi serta siaran sekolah.
               </p>
             </div>
           </div>

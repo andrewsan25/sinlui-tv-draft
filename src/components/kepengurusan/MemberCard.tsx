@@ -1,55 +1,51 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { ExternalLink, Instagram } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import type { Member } from "@/data/kepengurusan";
 import { cn } from "@/lib/utils";
 
 interface MemberCardProps {
   member: Member;
   featured?: boolean;
+  codeLabel?: string;
 }
 
-export function MemberCard({ member, featured = false }: MemberCardProps) {
+export function MemberCard({
+  member,
+  featured = false,
+  codeLabel,
+}: MemberCardProps) {
   const shouldReduceMotion = useReducedMotion();
   const isLead = member.tier === "bph-lead";
   const isBph = member.tier === "bph" || isLead;
   const isKoordinator = member.tier === "koordinator";
 
+  const plateCode =
+    codeLabel ??
+    (isBph
+      ? "BPH · 26/27"
+      : `${member.division.toUpperCase().slice(0, 5)} · 26/27`);
+
   return (
     <motion.article
       layout={!shouldReduceMotion}
-      initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, scale: 0.96 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, scale: 0.96 }}
+      initial={shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={shouldReduceMotion ? { opacity: 0 } : { opacity: 0, y: 8 }}
       transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-      className={cn(
-        "group relative flex flex-col overflow-hidden rounded-3xl border bg-white transition-all duration-300 hover:-translate-y-1 hover:shadow-xl",
-        isLead
-          ? "border-[#0F2B5B]/20 shadow-md shadow-[#0F2B5B]/5 hover:border-[#F97316] hover:shadow-orange-500/10"
-          : isBph
-            ? "border-blue-200/90 hover:border-[#2563EB] hover:shadow-blue-500/10"
-            : "border-slate-200 hover:border-[#F97316] hover:shadow-orange-500/10"
-      )}
+      className="group flex flex-col"
     >
-      {/* Top accent bar for BPH hierarchy */}
-      {isBph ? (
-        <div
-          aria-hidden="true"
-          className={cn(
-            "h-1.5 w-full",
-            isLead
-              ? "bg-gradient-to-r from-[#0F2B5B] via-[#2563EB] to-[#F97316]"
-              : "bg-[#2563EB]"
-          )}
-        />
-      ) : null}
-
-      {/* 3:4 Portrait Frame */}
+      {/* 3:4 Editorial Portrait Frame */}
       <div
         className={cn(
-          "relative w-full overflow-hidden bg-slate-100",
-          featured ? "aspect-[4/4.6] sm:aspect-[3/3.6]" : "aspect-[3/4]"
+          "relative w-full overflow-hidden rounded-lg border transition-colors duration-300",
+          featured ? "aspect-[4/4.3]" : "aspect-[3/4]",
+          isLead
+            ? "border-[#0F2B5B] bg-[#0F2B5B] group-hover:border-[#FF5A00]"
+            : isKoordinator
+              ? "border-blue-200/90 bg-[#EFF4FB] group-hover:border-[#2563EB]"
+              : "border-slate-200 bg-[#F4F6FA] group-hover:border-[#FF5A00]"
         )}
       >
         {member.photoUrl ? (
@@ -57,79 +53,100 @@ export function MemberCard({ member, featured = false }: MemberCardProps) {
           <img
             src={member.photoUrl}
             alt={member.name}
-            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
           />
         ) : (
-          <div
-            className={cn(
-              "relative flex h-full w-full flex-col items-center justify-center p-6",
-              isLead
-                ? "bg-gradient-to-br from-slate-50 via-blue-50/70 to-orange-50/70"
-                : isKoordinator
-                  ? "bg-gradient-to-br from-slate-50 via-blue-50/50 to-slate-100"
-                  : "bg-gradient-to-br from-slate-50 via-white to-slate-100"
-            )}
-          >
-            {/* Viewfinder corner reticles */}
+          <div className="editorial-grain relative flex h-full w-full flex-col justify-between p-4 sm:p-5">
+            {/* Optical Crop Hairlines */}
             <span
               aria-hidden="true"
-              className="absolute left-3.5 top-3.5 h-3.5 w-3.5 border-l-2 border-t-2 border-[#0F2B5B]/25 transition-colors group-hover:border-[#F97316]"
-            />
-            <span
-              aria-hidden="true"
-              className="absolute right-3.5 top-3.5 h-3.5 w-3.5 border-r-2 border-t-2 border-[#0F2B5B]/25 transition-colors group-hover:border-[#F97316]"
-            />
-            <span
-              aria-hidden="true"
-              className="absolute bottom-3.5 left-3.5 h-3.5 w-3.5 border-b-2 border-l-2 border-[#0F2B5B]/25 transition-colors group-hover:border-[#F97316]"
-            />
-            <span
-              aria-hidden="true"
-              className="absolute bottom-3.5 right-3.5 h-3.5 w-3.5 border-b-2 border-r-2 border-[#0F2B5B]/25 transition-colors group-hover:border-[#F97316]"
-            />
-
-            {/* Top division code */}
-            <span className="absolute left-5 top-5 font-mono text-[10px] font-semibold uppercase tracking-[0.14em] text-slate-400">
-              {member.division}
-            </span>
-
-            {/* Crisp Studio Monogram */}
-            <div
               className={cn(
-                "flex items-center justify-center rounded-full border-2 font-display font-extrabold shadow-sm transition-transform duration-300 group-hover:scale-105",
-                featured ? "h-24 w-24 text-2xl" : "h-20 w-20 text-xl",
+                "pointer-events-none absolute left-3 top-3 h-3 w-3 border-l border-t transition-colors",
                 isLead
-                  ? "border-orange-200 bg-[#0F2B5B] text-white"
+                  ? "border-white/30 group-hover:border-[#FF5A00]"
+                  : "border-[#0F2B5B]/20 group-hover:border-[#FF5A00]"
+              )}
+            />
+            <span
+              aria-hidden="true"
+              className={cn(
+                "pointer-events-none absolute right-3 top-3 h-3 w-3 border-r border-t transition-colors",
+                isLead
+                  ? "border-white/30 group-hover:border-[#FF5A00]"
+                  : "border-[#0F2B5B]/20 group-hover:border-[#FF5A00]"
+              )}
+            />
+
+            {/* Top Studio Plate Index */}
+            <div className="relative z-10 flex items-center justify-between pl-1.5 pt-1 font-mono text-[10px] font-semibold uppercase tracking-[0.14em]">
+              <span className={isLead ? "text-orange-300" : "text-slate-400"}>
+                {plateCode}
+              </span>
+              <span
+                className={cn(
+                  "h-1.5 w-1.5 rounded-full",
+                  isLead
+                    ? "bg-[#FF5A00]"
+                    : isKoordinator
+                      ? "bg-[#2563EB]"
+                      : "bg-slate-300 group-hover:bg-[#FF5A00]"
+                )}
+              />
+            </div>
+
+            {/* Cropped Monumental Architectural Typography Bleed */}
+            <div
+              aria-hidden="true"
+              className={cn(
+                "pointer-events-none select-none font-display text-[6.5rem] font-bold leading-none tracking-[-0.06em] transition-transform duration-500 group-hover:scale-[1.04] sm:text-[7.5rem]",
+                isLead
+                  ? "text-white/[0.08]"
                   : isKoordinator
-                    ? "border-blue-200 bg-[#2563EB] text-white"
-                    : "border-slate-200 bg-white text-[#0F2B5B]"
+                    ? "text-[#2563EB]/[0.1]"
+                    : "text-[#0F2B5B]/[0.07]"
               )}
             >
               {member.initials}
             </div>
 
-            <span className="mt-3 font-mono text-[10px] uppercase tracking-widest text-slate-400">
-              FOTO PROFIL 3:4
-            </span>
+            {/* Minimal Bottom Signature Stamp */}
+            <div className="relative z-10 flex items-end justify-between">
+              <span
+                className={cn(
+                  "font-mono text-[10px] uppercase tracking-[0.16em]",
+                  isLead ? "text-blue-200/80" : "text-slate-400"
+                )}
+              >
+                {member.kelas}
+              </span>
+              <span
+                className={cn(
+                  "font-display text-sm font-bold tracking-tight",
+                  isLead ? "text-white" : "text-[#0F2B5B]"
+                )}
+              >
+                {member.initials}
+              </span>
+            </div>
           </div>
         )}
 
-        {/* Hover Social Links Glass Strip */}
+        {/* Sliding Hover Link Strip */}
         {member.instagram || member.portfolio ? (
-          <div className="pointer-events-none absolute inset-x-3 bottom-3 flex items-center justify-between rounded-2xl border border-white/70 bg-white/90 px-3 py-2 opacity-0 shadow-md backdrop-blur-md transition-all duration-200 group-hover:pointer-events-auto group-hover:translate-y-0 group-hover:opacity-100">
-            <span className="font-mono text-[10px] font-semibold uppercase tracking-wider text-[#0F2B5B]">
-              Tautan Kru
+          <div className="pointer-events-none absolute inset-x-3 bottom-3 flex items-center justify-between rounded-md border border-slate-200/90 bg-white/95 px-3 py-2 opacity-0 shadow-sm backdrop-blur-md transition-all duration-200 group-hover:pointer-events-auto group-hover:opacity-100">
+            <span className="font-mono text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-500">
+              TAUTAN
             </span>
-            <div className="flex items-center gap-1.5">
+            <div className="flex items-center gap-3 font-mono text-[11px] font-semibold text-[#0F2B5B]">
               {member.instagram ? (
                 <a
                   href={member.instagram}
                   target="_blank"
                   rel="noreferrer"
-                  aria-label={`Instagram ${member.name}`}
-                  className="flex h-7 w-7 items-center justify-center rounded-lg border border-slate-200 bg-white text-[#0F2B5B] transition-colors hover:border-[#F97316] hover:text-[#F97316]"
+                  className="inline-flex items-center gap-0.5 hover:text-[#FF5A00]"
                 >
-                  <Instagram className="h-3.5 w-3.5" />
+                  <span>IG</span>
+                  <ArrowUpRight className="h-3 w-3" />
                 </a>
               ) : null}
               {member.portfolio ? (
@@ -137,10 +154,10 @@ export function MemberCard({ member, featured = false }: MemberCardProps) {
                   href={member.portfolio}
                   target="_blank"
                   rel="noreferrer"
-                  aria-label={`Portofolio ${member.name}`}
-                  className="flex h-7 w-7 items-center justify-center rounded-lg border border-slate-200 bg-white text-[#0F2B5B] transition-colors hover:border-[#2563EB] hover:text-[#2563EB]"
+                  className="inline-flex items-center gap-0.5 hover:text-[#2563EB]"
                 >
-                  <ExternalLink className="h-3.5 w-3.5" />
+                  <span>REEL</span>
+                  <ArrowUpRight className="h-3 w-3" />
                 </a>
               ) : null}
             </div>
@@ -148,35 +165,27 @@ export function MemberCard({ member, featured = false }: MemberCardProps) {
         ) : null}
       </div>
 
-      {/* Card Metadata */}
-      <div className="flex flex-1 flex-col justify-between p-4 sm:p-5">
-        <div>
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <span
-              className={cn(
-                "inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-semibold",
-                isLead
-                  ? "bg-[#F97316] text-white"
-                  : isBph
-                    ? "bg-blue-50 text-[#2563EB]"
-                    : isKoordinator
-                      ? "bg-[#2563EB] text-white"
-                      : "bg-slate-100 text-slate-700"
-              )}
-            >
-              {member.role}
-            </span>
-            <span className="font-mono text-[11px] font-medium text-slate-400">
-              {member.kelas}
-            </span>
-          </div>
-
-          <h3 className="mt-2.5 font-display text-lg font-bold text-[#0F2B5B]">
-            {member.name}
-          </h3>
+      {/* Borderless Editorial Metadata Beneath Frame */}
+      <div className="mt-3.5">
+        <div className="flex items-center justify-between gap-2 border-b border-slate-200 pb-2 font-mono text-[10px] font-semibold uppercase tracking-[0.12em]">
+          <span
+            className={cn(
+              isLead
+                ? "text-[#FF5A00]"
+                : isKoordinator || isBph
+                  ? "text-[#2563EB]"
+                  : "text-slate-500"
+            )}
+          >
+            {member.role}
+          </span>
+          <span className="text-slate-400">{member.kelas}</span>
         </div>
 
-        <p className="mt-2 border-t border-slate-100 pt-2.5 text-xs leading-relaxed text-slate-500">
+        <h3 className="mt-2.5 font-display text-lg font-bold tracking-tight text-[#0F2B5B]">
+          {member.name}
+        </h3>
+        <p className="mt-0.5 text-xs leading-relaxed text-slate-500">
           {member.specialty}
         </p>
       </div>

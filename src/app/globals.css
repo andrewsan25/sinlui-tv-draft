@@ -2,15 +2,16 @@
 
 @theme inline {
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-space), var(--font-jakarta), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-space), ui-monospace, monospace;
 
   --color-brand-navy: #0F2B5B;
   --color-brand-blue: #2563EB;
-  --color-brand-orange: #F97316;
-  --color-brand-orange-vivid: #FF6B00;
+  --color-brand-orange: #FF5A00;
+  --color-brand-orange-warm: #F97316;
   --color-surface: #FFFFFF;
   --color-surface-subtle: #F8FAFC;
+  --color-hairline: #E2E8F0;
 }
 
 @layer base {
@@ -31,11 +32,11 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
     color: #0F2B5B;
-    letter-spacing: -0.02em;
+    letter-spacing: -0.03em;
   }
 
   ::selection {
-    background-color: rgba(249, 115, 22, 0.16);
+    background-color: rgba(255, 90, 0, 0.14);
     color: #0F2B5B;
   }
 }
@@ -57,14 +58,6 @@ html.lenis body {
   overflow: hidden;
 }
 
-.bg-editorial-grid {
-  background-image:
-    linear-gradient(to right, rgba(15, 43, 91, 0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(15, 43, 91, 0.045) 1px, transparent 1px);
-  background-size: 40px 40px;
-}
-
-.bg-editorial-dots {
-  background-image: radial-gradient(rgba(37, 99, 235, 0.14) 1px, transparent 1px);
-  background-size: 24px 24px;
+.editorial-grain {
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 160 160' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
 }

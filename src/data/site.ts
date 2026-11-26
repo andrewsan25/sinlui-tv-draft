@@ -12,6 +12,7 @@ export interface SocialLinkItem {
 
 export interface StatItem {
   id: string;
+  index: string;
   value: number;
   suffix: string;
   label: string;
@@ -20,6 +21,7 @@ export interface StatItem {
 
 export interface HeroReelMode {
   id: "broadcast" | "cinema" | "photo";
+  index: string;
   label: string;
   shortTag: string;
   eventTitle: string;
@@ -30,18 +32,19 @@ export interface HeroReelMode {
   iso: string;
   aperture: string;
   lens: string;
+  image: string;
   accent: "orange" | "blue";
   storyboardNotes: string[];
 }
 
 export const SITE_CONFIG = {
   name: "Sinlui TV",
-  tagline: "Lensa Resmi & Siaran Kreatif Sekolah",
+  tagline: "Unit Dokumentasi & Penyiaran Resmi",
   subtitle: "Dokumentasi · Videografi · Fotografi · Broadcasting",
   period: "2026/2027",
   schoolName: "SMA Katolik St. Louis 1 Surabaya",
   description:
-    "Organisasi dokumentasi, videografi, fotografi, dan broadcasting resmi sekolah yang mengabadikan setiap momen, prestasi, dan energi panggung dengan standar produksi sinematik.",
+    "Unit produksi multimedia resmi sekolah untuk dokumentasi editorial, sinematografi acara, foto jurnalistik, dan penyiaran langsung multi-kamera.",
   email: "sinluitv@sinlui.sch.id",
   location: "Studio Multimedia · Lantai 2 Gedung Utama",
   copyright: "© 2026 Sinlui TV. Seluruh hak cipta dilindungi.",
@@ -51,17 +54,17 @@ export const NAV_LINKS: NavLinkItem[] = [
   {
     label: "Home",
     href: "/home",
-    description: "Beranda & highlight produksi",
+    description: "Beranda & arsip produksi",
   },
   {
     label: "About",
     href: "/about",
-    description: "Profil, visi misi & divisi kerja",
+    description: "Profil studio, visi misi & lima divisi",
   },
   {
     label: "Kepengurusan",
     href: "/kepengurusan",
-    description: "Struktur BPH & anggota aktif",
+    description: "Susunan BPH & kru aktif",
   },
 ];
 
@@ -86,30 +89,34 @@ export const SOCIAL_LINKS: SocialLinkItem[] = [
 export const HOME_STATS: StatItem[] = [
   {
     id: "events",
+    index: "01",
     value: 150,
     suffix: "+",
     label: "Event Terliput",
-    sublabel: "Akademik, seni, olahraga & perayaan besar",
+    sublabel: "Agenda akademik, seni, olahraga & perayaan tahunan",
   },
   {
     id: "hours",
+    index: "02",
     value: 1200,
     suffix: "+",
-    label: "Jam Dokumentasi & Siaran",
-    sublabel: "Produksi arsip, aftermovie & live multicam",
+    label: "Jam Produksi",
+    sublabel: "Arsip kamera cinema, pascaproduksi & siaran langsung",
   },
   {
     id: "members",
+    index: "03",
     value: 48,
     suffix: "",
-    label: "Anggota & Kru Aktif",
-    sublabel: "BPH dan personel lintas 5 divisi produksi",
+    label: "Kru Aktif",
+    sublabel: "Badan Pengurus Harian dan personel spesialis lapangan",
   },
   {
     id: "divisions",
+    index: "04",
     value: 5,
     suffix: "",
-    label: "Divisi Produksi",
+    label: "Divisi Terpadu",
     sublabel: "Fotografi, Videografi, Editing, Broadcast & Desain",
   },
 ];
@@ -117,59 +124,65 @@ export const HOME_STATS: StatItem[] = [
 export const HERO_REEL_MODES: HeroReelMode[] = [
   {
     id: "broadcast",
+    index: "01",
     label: "Broadcast Live",
-    shortTag: "LIVE PGM",
-    eventTitle: "Misa Syukur & Dies Natalis Live Multicam",
-    location: "Aula Utama Sekolah",
-    statusLabel: "ON AIR · 4 CAM SYNC",
+    shortTag: "PGM · 4 CAM",
+    eventTitle: "Misa Syukur & Dies Natalis Multicam",
+    location: "Aula Utama · Surabaya",
+    statusLabel: "ON AIR",
     resolution: "1080p60",
     fps: "60 FPS",
     iso: "ISO 800",
     aperture: "f/2.8",
     lens: "70-200mm GM",
+    image: "/images/hero-broadcast.jpg",
     accent: "orange",
     storyboardNotes: [
-      "Switchboard 4-angle real-time dengan lower-third otomatis",
-      "Direct audio feed dari mixer panggung & ambient mic",
-      "Streaming redundan YouTube dengan latency rendah",
+      "Switching 4 sudut kamera real-time dengan lower-third otomatis",
+      "Direct audio feed dari mixer panggung & mikrofon ruang",
+      "Siaran redundan YouTube dengan pemantauan bitrate terpusat",
     ],
   },
   {
     id: "cinema",
+    index: "02",
     label: "Cinema Aftermovie",
-    shortTag: "4K LOG",
+    shortTag: "4K · S-LOG3",
     eventTitle: "Aftermovie Sinlui Fest & Malam Puncak",
-    location: "Lapangan & Panggung Utama",
-    statusLabel: "REC · S-LOG3",
+    location: "Panggung Utama Sekolah",
+    statusLabel: "REC 4K",
     resolution: "4K UHD",
     fps: "120 FPS",
     iso: "ISO 640",
     aperture: "f/1.8",
     lens: "24-70mm GM II",
+    image: "/images/work-stage.jpg",
     accent: "blue",
     storyboardNotes: [
-      "Gimbal tracking shot mengikuti koreografi panggung",
-      "Sound design dinamis dipadukan sorakan penonton",
-      "Same-Day Edit (SDE) tayang sebelum acara ditutup",
+      "Gimbal tracking shot mengikuti koreografi dan tata lampu panggung",
+      "Sound design ritmis dipadukan dengan atmosfer sorakan audiens",
+      "Same-Day Edit (SDE) tayang sebelum rangkaian acara ditutup",
     ],
   },
   {
     id: "photo",
+    index: "03",
     label: "Photo Press",
-    shortTag: "RAW BURST",
+    shortTag: "RAW · 20 FPS",
     eventTitle: "Liputan DBL & Tribun Suporter",
     location: "DBL Arena Surabaya",
-    statusLabel: "PRESS PASS · 20 FPS",
+    statusLabel: "PRESS PASS",
     resolution: "33 MP RAW",
     fps: "1/2000s",
     iso: "ISO 1600",
     aperture: "f/2.8",
     lens: "35mm & 70-200mm",
+    image: "/images/work-arena.jpg",
     accent: "orange",
     storyboardNotes: [
-      "Liputan sisi lapangan & ekspresi koreo tribun secara real-time",
-      "Seleksi cepat & pengiriman galeri instan untuk publikasi OSIS",
-      "Arsip foto resolusi tinggi untuk majalah tahunan sekolah",
+      "Liputan sisi lapangan & koreografi tribun berkecepatan tinggi",
+      "Seleksi kurasi instan untuk kanal media sosial sekolah",
+      "Arsip resolusi penuh untuk publikasi pers dan majalah tahunan",
     ],
   },
 ];

@@ -47,35 +47,30 @@ export function TimelineSection() {
     <section className="bg-white py-16 sm:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl">
-          <p className="font-mono text-xs font-semibold uppercase tracking-[0.16em] text-[#F97316]">
-            Perjalanan Organisasi
+          <p className="font-mono text-[11px] font-semibold uppercase tracking-[0.16em] text-[#2563EB]">
+            04 / JEJAK PERJALANAN
           </p>
-          <h2 className="mt-1.5 font-display text-3xl font-extrabold text-[#0F2B5B] sm:text-4xl">
-            Jejak Perkembangan Sinlui TV
+          <h2 className="mt-2 font-display text-3xl font-bold tracking-[-0.035em] text-[#0F2B5B] sm:text-4xl">
+            Evolusi Studio Sinlui TV.
           </h2>
-          <p className="mt-2.5 text-sm leading-relaxed text-slate-600 sm:text-base">
-            Transformasi bertahap dari tim arsip kamera sederhana menjadi unit
-            penyiaran dan dokumentasi modern sekolah.
-          </p>
         </div>
 
         <div ref={containerRef} className="relative mt-12 pl-7 sm:pl-10">
-          {/* Static background track */}
+          {/* Hairline vertical guide */}
           <div
             aria-hidden="true"
-            className="absolute bottom-2 left-2.5 top-2 w-[2px] rounded-full bg-slate-200 sm:left-3.5"
+            className="absolute bottom-2 left-2 top-2 w-px bg-slate-200 sm:left-3"
           />
-          {/* GSAP ScrollTrigger scrubbed progress track */}
           <div
             ref={progressBarRef}
             aria-hidden="true"
             className={cn(
-              "will-change-transform absolute bottom-2 left-2.5 top-2 w-[2px] origin-top rounded-full bg-gradient-to-b from-[#0F2B5B] via-[#2563EB] to-[#F97316] sm:left-3.5",
+              "will-change-transform absolute bottom-2 left-2 top-2 w-px origin-top bg-[#FF5A00] sm:left-3",
               shouldReduceMotion ? "scale-y-100" : ""
             )}
           />
 
-          <div className="space-y-8">
+          <div className="divide-y divide-slate-200">
             {TIMELINE_MILESTONES.map((milestone, idx) => {
               const isLatest = idx === TIMELINE_MILESTONES.length - 1;
 
@@ -83,57 +78,47 @@ export function TimelineSection() {
                 <motion.article
                   key={milestone.year}
                   initial={
-                    shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 18 }
+                    shouldReduceMotion ? { opacity: 1 } : { opacity: 0, y: 14 }
                   }
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-40px" }}
                   transition={{
-                    duration: 0.45,
-                    delay: shouldReduceMotion ? 0 : idx * 0.05,
+                    duration: 0.4,
+                    delay: shouldReduceMotion ? 0 : idx * 0.04,
                     ease: [0.22, 1, 0.36, 1],
                   }}
-                  className="relative"
+                  className="relative grid grid-cols-1 gap-4 py-8 first:pt-2 last:pb-2 md:grid-cols-12 md:items-baseline"
                 >
-                  {/* Timeline Node Dot */}
                   <span
                     aria-hidden="true"
                     className={cn(
-                      "absolute -left-[25px] top-6 flex h-4 w-4 items-center justify-center rounded-full border-2 border-white shadow-xs sm:-left-[33px]",
-                      isLatest ? "bg-[#F97316]" : "bg-[#2563EB]"
+                      "absolute -left-[25px] top-10 h-2.5 w-2.5 rounded-full border-2 border-white first:top-4 sm:-left-[33px]",
+                      isLatest ? "bg-[#FF5A00]" : "bg-[#0F2B5B]"
                     )}
                   />
 
-                  <div
-                    className={cn(
-                      "rounded-2xl border p-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md",
-                      isLatest
-                        ? "border-orange-200 bg-orange-50/35 hover:border-[#F97316]"
-                        : "border-slate-200 bg-white hover:border-[#2563EB]/50"
-                    )}
-                  >
-                    <div className="flex flex-wrap items-center justify-between gap-2">
-                      <span className="font-mono text-sm font-bold text-[#0F2B5B]">
-                        {milestone.year}
-                      </span>
-                      <span
-                        className={cn(
-                          "rounded-full px-3 py-0.5 font-mono text-[11px] font-semibold",
-                          isLatest
-                            ? "bg-[#F97316] text-white"
-                            : "border border-blue-200 bg-blue-50 text-[#2563EB]"
-                        )}
-                      >
-                        {milestone.highlightTag}
-                      </span>
-                    </div>
+                  <div className="md:col-span-4">
+                    <span className="font-display text-3xl font-bold tracking-[-0.04em] text-[#0F2B5B] sm:text-4xl">
+                      {milestone.year}
+                    </span>
+                    <span
+                      className={cn(
+                        "mt-1 block font-mono text-[11px] font-semibold uppercase tracking-[0.14em]",
+                        isLatest ? "text-[#FF5A00]" : "text-[#2563EB]"
+                      )}
+                    >
+                      {milestone.highlightTag}
+                    </span>
+                  </div>
 
-                    <h3 className="mt-2 font-display text-xl font-bold text-[#0F2B5B]">
+                  <div className="md:col-span-8">
+                    <h3 className="font-display text-xl font-bold text-[#0F2B5B] sm:text-2xl">
                       {milestone.title}
                     </h3>
-                    <p className="mt-0.5 text-xs font-semibold text-[#2563EB]">
+                    <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-slate-400">
                       {milestone.subtitle}
                     </p>
-                    <p className="mt-2.5 text-sm leading-relaxed text-slate-600">
+                    <p className="mt-3 text-sm leading-relaxed text-slate-600 sm:text-base">
                       {milestone.description}
                     </p>
                   </div>

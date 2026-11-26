@@ -8,7 +8,8 @@ export interface CoverageHighlight {
   specs: string;
   durationOrCount: string;
   accent: "orange" | "blue";
-  visualVariant: "stage" | "arena" | "broadcast" | "orientasi" | "cup" | "profile";
+  image: string;
+  visualMode: "photo" | "multiview" | "letterbox" | "colorgrade";
 }
 
 export interface TestimonialItem {
@@ -38,25 +39,27 @@ export const COVERAGE_HIGHLIGHTS: CoverageHighlight[] = [
     category: "Aftermovie",
     year: "2026",
     summary:
-      "Rekaman panggung utama, transisi lighting konser, dan atmosfer ribuan siswa dalam satu rilisan aftermovie berenergi tinggi.",
-    detailNote: "Dirilis kurang dari 24 jam pasca-acara dengan 3 unit kamera cinema.",
+      "Energi panggung utama, transisi tata cahaya konser, dan atmosfer ribuan siswa dalam satu rilisan aftermovie sinematik.",
+    detailNote: "Dirilis kurang dari 24 jam pasca-acara menggunakan 3 unit cinema.",
     specs: "4K · 60fps · 3 Cam",
-    durationOrCount: "04:32 Min",
+    durationOrCount: "04:32",
     accent: "orange",
-    visualVariant: "stage",
+    image: "/images/work-stage.jpg",
+    visualMode: "photo",
   },
   {
     id: "dbl-surabaya-tribun",
-    title: "DBL Surabaya & Tribun Supporter",
+    title: "DBL Surabaya & Tribun Suporter",
     category: "Photo Essay",
     year: "2026",
     summary:
-      "Rangkaian foto aksi lapangan dan koreografi tribun yang menangkap tensi pertandingan hingga momen selebrasi kemenangan.",
-    detailNote: "Terkumpul 420+ frame terpilih untuk arsip pers dan media sosial sekolah.",
+      "Foto aksi lapangan berkecepatan tinggi dan koreografi tribun yang merekam tensi pertandingan hingga selebrasi akhir.",
+    detailNote: "420+ frame terkurasi untuk arsip pers dan publikasi sekolah.",
     specs: "RAW · 20fps · Dual Body",
     durationOrCount: "120+ Foto",
     accent: "blue",
-    visualVariant: "arena",
+    image: "/images/work-arena.jpg",
+    visualMode: "photo",
   },
   {
     id: "misa-syukur-multicam",
@@ -64,12 +67,13 @@ export const COVERAGE_HIGHLIGHTS: CoverageHighlight[] = [
     category: "Live Broadcast",
     year: "2026",
     summary:
-      "Siaran langsung multi-kamera dengan integrasi audio mixer aula, grafis liturgi real-time, dan pemantauan sinyal terpusat.",
-    detailNote: "Disaksikan serentak oleh orang tua, alumni, dan seluruh kelas secara jernih.",
+      "Siaran langsung multi-kamera dengan integrasi audio mixer aula, grafis liturgi real-time, dan kendali sinyal terpusat.",
+    detailNote: "Disaksikan serentak oleh orang tua, alumni, dan seluruh kelas.",
     specs: "1080p60 · 4 Cam Switcher",
     durationOrCount: "02:15 Jam",
     accent: "orange",
-    visualVariant: "broadcast",
+    image: "/images/hero-broadcast.jpg",
+    visualMode: "multiview",
   },
   {
     id: "mpls-orientasi",
@@ -77,12 +81,13 @@ export const COVERAGE_HIGHLIGHTS: CoverageHighlight[] = [
     category: "Aftermovie",
     year: "2026",
     summary:
-      "Merangkum hari pertama siswa baru dari sesi pengenalan lingkungan sekolah hingga flashmob penutupan yang penuh kehangatan.",
-    detailNote: "Diputar langsung pada acara penutupan MPLS di hadapan seluruh angkatan baru.",
-    specs: "4K · Gimbal + Drone",
-    durationOrCount: "03:45 Min",
+      "Merangkum hari pertama siswa baru dari sesi pengenalan kampus hingga flashmob penutupan yang penuh kehangatan.",
+    detailNote: "Tayang langsung pada sesi penutupan MPLS di hadapan angkatan baru.",
+    specs: "4K · Gimbal · S-Log3",
+    durationOrCount: "03:45",
     accent: "blue",
-    visualVariant: "orientasi",
+    image: "/images/hero-broadcast.jpg",
+    visualMode: "photo",
   },
   {
     id: "sinlui-cup-finals",
@@ -90,12 +95,13 @@ export const COVERAGE_HIGHLIGHTS: CoverageHighlight[] = [
     category: "Aftermovie",
     year: "2025",
     summary:
-      "Cuplikan cepat cabang basket, futsal, dan e-sports dengan sound design ritmis serta slow-motion 120fps di momen krusial.",
-    detailNote: "Menjadi tayangan highlight dengan engagement tertinggi sepanjang semester.",
+      "Cuplikan ritmis cabang basket, futsal, dan e-sports dengan sound design presisi serta slow-motion 120fps.",
+    detailNote: "Menjadi rilisan highlight dengan jangkauan tertinggi sepanjang semester.",
     specs: "4K · 120fps · Telephoto",
-    durationOrCount: "02:58 Min",
+    durationOrCount: "02:58",
     accent: "orange",
-    visualVariant: "cup",
+    image: "/images/work-arena.jpg",
+    visualMode: "letterbox",
   },
   {
     id: "dokumenter-guru-alumni",
@@ -103,12 +109,13 @@ export const COVERAGE_HIGHLIGHTS: CoverageHighlight[] = [
     category: "Dokumenter",
     year: "2025",
     summary:
-      "Serial wawancara mendalam tentang dedikasi pendidik dan perjalanan alumni inspiratif dengan tata cahaya studio yang intim.",
-    detailNote: "Diproduksi dalam format episode pendek untuk kanal YouTube resmi sekolah.",
+      "Serial wawancara mendalam mengenai dedikasi pendidik dan jejak alumni dengan tata cahaya studio yang bersih.",
+    detailNote: "Diproduksi sebagai serial berkala untuk kanal YouTube resmi sekolah.",
     specs: "4K · 24fps · 3-Point Light",
-    durationOrCount: "08:14 Min",
+    durationOrCount: "08:14",
     accent: "blue",
-    visualVariant: "profile",
+    image: "/images/work-stage.jpg",
+    visualMode: "colorgrade",
   },
 ];
 
@@ -116,37 +123,37 @@ export const TESTIMONIALS: TestimonialItem[] = [
   {
     id: "testi-pensi",
     quote:
-      "Tim Sinlui TV selalu sigap dari gladi bersih sampai closing. Same-day edit yang mereka tayangkan langsung bikin satu aula merinding.",
+      "Tim Sinlui TV selalu sigap dari gladi bersih sampai closing. Same-day edit yang ditayangkan langsung bikin satu aula merinding.",
     author: "Gabriella Tan",
     role: "Ketua Panitia Pensi 2026",
-    event: "Dies Natalis & Pensi",
+    event: "Dies Natalis",
     initials: "GT",
     accent: "orange",
   },
   {
     id: "testi-osis",
     quote:
-      "Koordinasi dengan kru sangat rapi. Mereka tidak hanya merekam acara, tapi mengerti alur rundown sehingga tidak ada momen penting yang terlewat.",
+      "Koordinasi kru sangat presisi. Mereka membaca alur rundown dengan baik sehingga tidak ada satu pun momen krusial yang terlewat.",
     author: "Andreas Wijaya, S.Pd.",
     role: "Pembina OSIS",
-    event: "Pelantikan & Rapat Kerja",
+    event: "Pelantikan OSIS",
     initials: "AW",
     accent: "blue",
   },
   {
     id: "testi-kesiswaan",
     quote:
-      "Kualitas siaran langsung upacara dan misa sekolah meningkat drastis. Orang tua di rumah bisa mengikuti kegiatan dengan visual yang sangat jernih.",
+      "Kualitas siaran langsung misa dan upacara meningkat jauh. Orang tua di rumah bisa mengikuti kegiatan dengan visual dan audio yang jernih.",
     author: "Maria Helena, M.Pd.",
-    role: "Wakasek Bidang Kesiswaan",
-    event: "Live Streaming Sekolah",
+    role: "Wakasek Kesiswaan",
+    event: "Live Multicam",
     initials: "MH",
     accent: "orange",
   },
   {
     id: "testi-basket",
     quote:
-      "Foto-foto pertandingan dan highlight reel dari Sinlui TV selalu jadi penyemangat tim sebelum babak semifinal. Framing-nya terasa seperti siaran profesional.",
+      "Foto pertandingan dan highlight reel Sinlui TV selalu memacu semangat tim sebelum semifinal. Komposisi dan warnanya terasa kelas siaran pro.",
     author: "Kevin Pratama",
     role: "Kapten Tim Basket Putra",
     event: "DBL & Sinlui Cup",
@@ -156,20 +163,20 @@ export const TESTIMONIALS: TestimonialItem[] = [
   {
     id: "testi-mpls",
     quote:
-      "Dari hari pertama MPLS hingga penutupan, hasil foto langsung siap diunggah di sore hari. Sangat membantu tim publikasi dan dokumentasi panitia.",
+      "Sejak hari pertama MPLS hingga penutupan, galeri foto sudah siap dipublikasikan di sore hari. Alur kerja mereka sangat tertata.",
     author: "Clarita Gunawan",
     role: "Koordinator Sie Acara MPLS",
-    event: "Masa Orientasi Siswa",
+    event: "Orientasi Siswa",
     initials: "CG",
     accent: "orange",
   },
   {
     id: "testi-padus",
     quote:
-      "Audio dan visual konser paduan suara kami tertangkap sangat bersih dan emosional. Arsip video mereka sangat berharga untuk portofolio lomba kami.",
+      "Rekaman audio dan video konser paduan suara kami terdengar bersih dan utuh. Arsip mereka sangat membantu portofolio kompetisi kami.",
     author: "Daniel Hartono",
-    role: "Ketua Ekstrakurikuler Paduan Suara",
-    event: "Konser Tahunan Seni",
+    role: "Ketua Paduan Suara",
+    event: "Konser Tahunan",
     initials: "DH",
     accent: "blue",
   },
@@ -181,8 +188,8 @@ export const BTS_MOMENTS: BtsMoment[] = [
     title: "Switchboard Control Room",
     division: "Broadcasting",
     caption:
-      "Pemantauan 4 kamera simultan, audio tally, dan transisi lower-third dari meja kontrol belakang panggung.",
-    gearTag: "ATEM Switcher · vMix",
+      "Pemantauan 4 kamera simultan, audio tally, dan lower-third dari meja kontrol belakang panggung.",
+    gearTag: "ATEM · vMix",
     timecode: "TC 08:42:15",
     accent: "orange",
   },
@@ -191,18 +198,18 @@ export const BTS_MOMENTS: BtsMoment[] = [
     title: "Gimbal Tracking Shot",
     division: "Videografi",
     caption:
-      "Pergerakan kamera dinamis mengikuti perpindahan formasi penampil di atas panggung dengan fokus kontinu.",
-    gearTag: "RS4 Gimbal · 24mm f/1.4",
+      "Pergerakan kamera kontinu mengikuti perpindahan formasi penampil di atas panggung utama.",
+    gearTag: "RS4 · 24mm f/1.4",
     timecode: "TC 19:14:03",
     accent: "blue",
   },
   {
     id: "bts-color-mix",
     title: "Color Grading & Sound Mix",
-    division: "Video Editing",
+    division: "Editing",
     caption:
-      "Penyelarasan tone warna antar kamera dan mixing efek transisi agar ritme aftermovie terasa menyatu.",
-    gearTag: "DaVinci · Premiere Pro",
+      "Penyelarasan profil warna antar kamera dan mixing ritmis agar alur aftermovie menyatu.",
+    gearTag: "DaVinci · Premiere",
     timecode: "TC 22:05:49",
     accent: "orange",
   },
@@ -211,28 +218,28 @@ export const BTS_MOMENTS: BtsMoment[] = [
     title: "Press Pit Fotografi Panggung",
     division: "Fotografi",
     caption:
-      "Pengambilan sudut rendah di area depan panggung untuk menangkap ekspresi dan tata cahaya secara dramatis.",
-    gearTag: "70-200mm f/2.8 · Dual Slot",
+      "Sudut rendah di area depan panggung untuk menangkap ekspresi dan dimensi tata cahaya.",
+    gearTag: "70-200mm f/2.8",
     timecode: "TC 20:31:11",
     accent: "blue",
   },
   {
     id: "bts-comms-check",
-    title: "Pre-Show Audio & Comms Check",
+    title: "Pre-Show Audio & Comms",
     division: "Broadcasting",
     caption:
-      "Uji interkom kru kamera, sinkronisasi wireless mic pembawa acara, dan pengecekan bitrate sebelum live dimulai.",
-    gearTag: "Intercom · 10Mbps Uplink",
+      "Uji interkom operator kamera dan stabilitas uplink sebelum hitung mundur siaran dimulai.",
+    gearTag: "Intercom · 10Mbps",
     timecode: "TC 06:55:00",
     accent: "orange",
   },
   {
     id: "bts-sde-desk",
-    title: "Instant Same-Day Edit (SDE)",
-    division: "Editing & Desain",
+    title: "Same-Day Edit Desk",
+    division: "Editing",
     caption:
-      "Ingest kartu memori langsung di sela acara agar cuplikan highlight bisa diputar pada sesi penutupan hari itu juga.",
-    gearTag: "NVMe Scratch · Thumbnail Kit",
+      "Ingest kartu memori langsung di sela acara agar highlight bisa diputar saat penutupan.",
+    gearTag: "NVMe · SDE Rig",
     timecode: "TC 16:48:27",
     accent: "blue",
   },

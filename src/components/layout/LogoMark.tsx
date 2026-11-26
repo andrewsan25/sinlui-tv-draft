@@ -2,51 +2,32 @@ import { cn } from "@/lib/utils";
 
 interface LogoMarkProps {
   className?: string;
-  showSubtext?: boolean;
 }
 
-export function LogoMark({ className, showSubtext = false }: LogoMarkProps) {
+export function LogoMark({ className }: LogoMarkProps) {
   return (
     <div className={cn("inline-flex items-center gap-2.5", className)}>
-      <div className="relative flex h-9 w-9 items-center justify-center rounded-xl bg-[#0F2B5B] shadow-sm shadow-[#0F2B5B]/15">
+      <div className="relative flex h-7 w-7 items-center justify-center rounded-md bg-[#0F2B5B]">
         <svg
-          width="22"
-          height="22"
+          width="16"
+          height="16"
           viewBox="0 0 24 24"
           fill="none"
           aria-hidden="true"
         >
-          {/* Broadcast viewfinder frame */}
-          <rect
-            x="2.5"
-            y="5"
-            width="19"
-            height="14"
-            rx="3.5"
-            stroke="#FFFFFF"
-            strokeWidth="1.75"
-          />
-          {/* Play / Lens Aperture */}
           <path
-            d="M10 9.4L15 12L10 14.6V9.4Z"
-            fill="#FFFFFF"
+            d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2"
+            stroke="#FFFFFF"
+            strokeWidth="2"
+            strokeLinecap="square"
           />
-          {/* Live orange indicator */}
-          <circle cx="17.5" cy="8.5" r="2" fill="#F97316" />
+          <circle cx="12" cy="12" r="2.75" fill="#FF5A00" />
         </svg>
-        <span className="absolute -right-0.5 -top-0.5 h-2.5 w-2.5 rounded-full border-2 border-white bg-[#F97316]" />
       </div>
 
-      <div className="flex flex-col leading-none">
-        <span className="font-display text-lg font-extrabold tracking-tight text-[#0F2B5B]">
-          SINLUI <span className="text-[#F97316]">TV</span>
-        </span>
-        {showSubtext ? (
-          <span className="mt-0.5 font-mono text-[10px] font-medium uppercase tracking-[0.16em] text-slate-500">
-            Broadcast &amp; Media
-          </span>
-        ) : null}
-      </div>
+      <span className="font-display text-[17px] font-bold tracking-[-0.04em] text-[#0F2B5B]">
+        SINLUI<span className="text-[#FF5A00]">.TV</span>
+      </span>
     </div>
   );
 }
