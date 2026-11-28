@@ -7,10 +7,15 @@ import { MEMBERS, PERIODE_AKTIF } from "@/data/kepengurusan";
 
 export const metadata: Metadata = {
   title: "Kepengurusan",
-  description: `Susunan Badan Pengurus Harian (BPH), koordinator, dan anggota divisi Sinlui TV periode ${PERIODE_AKTIF}.`,
+  description: `Susunan Guru Pembina, Badan Pengurus Harian (BPH), koordinator, dan anggota divisi Sinlui TV periode ${PERIODE_AKTIF}.`,
 };
 
 export default function KepengurusanPage() {
+  const pembinaCount = MEMBERS.filter((m) => m.tier === "pembina").length;
+  const bphCount = MEMBERS.filter(
+    (m) => m.tier === "bph-lead" || m.tier === "bph"
+  ).length;
+
   return (
     <PageTransition>
       {/* Editorial Roster Masthead */}
@@ -44,11 +49,11 @@ export default function KepengurusanPage() {
 
             <div className="lg:col-span-4 lg:text-right">
               <p className="text-xs font-semibold text-[#0F2B5B]">
-                {MEMBERS.length} Personel · 6 BPH · 5 Divisi
+                {pembinaCount} Pembina · {bphCount} BPH · 5 Divisi
               </p>
               <p className="mt-2 text-sm leading-relaxed text-slate-500">
-                Pimpinan harian, koordinator, dan kru aktif yang menggerakkan
-                produksi dokumentasi serta siaran sekolah.
+                Guru pembina, pimpinan harian, koordinator, dan kru aktif yang
+                menggerakkan produksi dokumentasi serta siaran sekolah.
               </p>
             </div>
           </div>

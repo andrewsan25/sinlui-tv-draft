@@ -2,6 +2,7 @@ export const PERIODE_AKTIF = "2026/2027";
 
 export const DIVISION_FILTERS = [
   "Semua",
+  "Pembina",
   "BPH",
   "Fotografi",
   "Videografi",
@@ -12,7 +13,12 @@ export const DIVISION_FILTERS = [
 
 export type DivisionFilter = (typeof DIVISION_FILTERS)[number];
 
-export type MemberTier = "bph-lead" | "bph" | "koordinator" | "anggota";
+export type MemberTier =
+  | "pembina"
+  | "bph-lead"
+  | "bph"
+  | "koordinator"
+  | "anggota";
 
 export interface Member {
   id: string;
@@ -23,12 +29,39 @@ export interface Member {
   kelas: string;
   specialty: string;
   initials: string;
+  quote?: string;
   photoUrl?: string;
   instagram?: string;
   portfolio?: string;
 }
 
 export const MEMBERS: Member[] = [
+  // ================= GURU PEMBINA =================
+  {
+    id: "pembina-1",
+    name: "Andreas Wijaya, S.Pd.",
+    role: "Guru Pembina Utama",
+    division: "Pembina",
+    tier: "pembina",
+    kelas: "Pembina Organisasi",
+    specialty: "Pengarah Program, Etika Jurnalistik & Pembinaan Organisasi",
+    initials: "AW",
+    quote:
+      "Sinlui TV adalah ruang belajar nyata bagi siswa untuk berkarya dengan disiplin, kepekaan visual, dan tanggung jawab.",
+  },
+  {
+    id: "pembina-2",
+    name: "Maria Helena, M.Pd.",
+    role: "Guru Pembina Pendamping",
+    division: "Pembina",
+    tier: "pembina",
+    kelas: "Bidang Kesiswaan",
+    specialty: "Koordinasi Liputan Sekolah & Pengembangan Talenta Media",
+    initials: "MH",
+    quote:
+      "Setiap bingkai yang direkam siswa hari ini akan menjadi arsip berharga yang menyatukan seluruh keluarga besar sekolah.",
+  },
+
   // ================= BPH LEAD =================
   {
     id: "bph-ketua",
