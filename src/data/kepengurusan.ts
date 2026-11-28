@@ -40,7 +40,7 @@ export const MEMBERS: Member[] = [
   {
     id: "pembina-1",
     name: "Andreas Wijaya, S.Pd.",
-    role: "Guru Pembina Utama",
+    role: "Guru Pembina",
     division: "Pembina",
     tier: "pembina",
     kelas: "Pembina Organisasi",
@@ -48,18 +48,6 @@ export const MEMBERS: Member[] = [
     initials: "AW",
     quote:
       "Sinlui TV adalah ruang belajar nyata bagi siswa untuk berkarya dengan disiplin, kepekaan visual, dan tanggung jawab.",
-  },
-  {
-    id: "pembina-2",
-    name: "Maria Helena, M.Pd.",
-    role: "Guru Pembina Pendamping",
-    division: "Pembina",
-    tier: "pembina",
-    kelas: "Bidang Kesiswaan",
-    specialty: "Koordinasi Liputan Sekolah & Pengembangan Talenta Media",
-    initials: "MH",
-    quote:
-      "Setiap bingkai yang direkam siswa hari ini akan menjadi arsip berharga yang menyatukan seluruh keluarga besar sekolah.",
   },
 
   // ================= BPH LEAD =================

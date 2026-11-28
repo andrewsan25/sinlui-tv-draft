@@ -1,18 +1,20 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { Session } from "@supabase/supabase-js";
 import {
   ArrowUpRight,
   Check,
   Edit3,
+  ImagePlus,
   LogOut,
   Plus,
   RefreshCw,
   Search,
   ShieldCheck,
   Trash2,
+  X,
 } from "lucide-react";
 import {
   DIVISION_FILTERS,
@@ -35,6 +37,9 @@ const TIER_OPTIONS: { value: MemberTier; label: string }[] = [
   { value: "koordinator", label: "Koordinator Divisi" },
   { value: "anggota", label: "Anggota Divisi" },
 ];
+
+const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
+const ALLOWED_MIME_TYPES = new Set(["image/jpeg", "image/png", "image/webp"]);
 
 interface FormState {
   name: string;
@@ -68,6 +73,7 @@ const DEFAULT_FORM: FormState = {
 
 export function KepengurusanAdmin() {
   const supabase = getSupabaseBrowserClient();
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
 
   const [session, setSession] = useState<Session | null>(null);
   const [authLoading, setAuthLoading] = useState(true);
@@ -84,6 +90,7 @@ export function KepengurusanAdmin() {
   const [form, setForm] = useState<FormState>(DEFAULT_FORM);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [uploadingPhoto, setUploadingPhoto] = useState(false);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
 
   const [filterDivision, setFilterDivision] = useState<DivisionFilter>("Semua");
@@ -160,6 +167,59 @@ export function KepengurusanAdmin() {
   const handleSignOut = async () => {
     if (!supabase) return;
     await supabase.auth.signOut();
+  };
+
+  const handlePhotoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !supabase) return;
+
+    setDataError(null);
+    setFeedback(null);
+
+    if (!ALLOWED_MIME_TYPES.has(file.type)) {
+      setDataError("Format foto harus JPG, PNG, atau WebP.");
+      e.target.value = "";
+      return;
+    }
+
+    if (file.size > MAX_PHOTO_BYTES) {
+      setDataError("Ukuran foto maksimal 5 MB.");
+      e.target.value = "";
+      return;
+    }
+
+    setUploadingPhoto(true);
+    const ext = file.name.split(".").pop()?.toLowerCase() || "jpg";
+    const slug = (form.name || "member")
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-|-$/g, "");
+    const filePath = `members/${Date.now()}-${slug || "foto"}.${ext}`;
+
+    const { error: uploadError } = await supabase.storage
+      .from("member-photos")
+      .upload(filePath, file, {
+        upsert: true,
+        contentType: file.type,
+      });
+
+    if (uploadError) {
+      setDataError(
+        `Gagal upload foto: ${uploadError.message}. Pastikan skrip supabase/sinlui_tv_members.sql terbaru sudah dijalankan di SQL Editor.`
+      );
+    } else {
+      const { data: publicUrlData } = supabase.storage
+        .from("member-photos")
+        .getPublicUrl(filePath);
+
+      setForm((prev) => ({ ...prev, photo_url: publicUrlData.publicUrl }));
+      setFeedback(
+        `Foto berhasil diunggah. Klik "${editingId ? "Simpan Perubahan" : "Tambah Pengurus Baru"}" untuk menyimpan.`
+      );
+    }
+
+    setUploadingPhoto(false);
+    e.target.value = "";
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -306,13 +366,21 @@ export function KepengurusanAdmin() {
         <h2 className="mt-4 font-display text-2xl font-semibold text-[#0F2B5B]">
           Masuk untuk mengelola{" "}
           <span className="font-serif italic font-normal text-[#F46F15]">
-            data pengurus.
+            nama &amp; foto.
           </span>
         </h2>
-        <p className="mt-2 text-xs leading-relaxed text-slate-500">
-          Gunakan akun admin yang terdaftar di Supabase Dashboard →{" "}
-          <strong>Authentication → Users</strong>.
-        </p>
+
+        <div className="mt-3 rounded-2xl bg-[#F6F8FC] p-3.5 text-xs leading-relaxed text-slate-600">
+          <p className="font-semibold text-[#0F2B5B]">
+            Cara membuat akun admin (sekali saja):
+          </p>
+          <p className="mt-1">
+            Buka Dashboard Supabase <strong>Backend-sinlui-tv</strong> →{" "}
+            <strong>Authentication → Users → Add user → Create new user</strong>
+            , masukkan email &amp; kata sandi, lalu centang{" "}
+            <strong>Auto Confirm User</strong>.
+          </p>
+        </div>
 
         <form onSubmit={handleSignIn} className="mt-6 space-y-4">
           <div>
@@ -373,6 +441,8 @@ export function KepengurusanAdmin() {
     return matchesDivision && matchesSearch;
   });
 
+  const previewInitials = computeInitials(form.name || "Sinlui TV");
+
   return (
     <div className="space-y-8">
       {/* Top Admin Bar */}
@@ -429,8 +499,8 @@ export function KepengurusanAdmin() {
               <code className="rounded bg-white px-1.5 py-0.5">
                 supabase/sinlui_tv_members.sql
               </code>{" "}
-              di Supabase SQL Editor terlebih dahulu untuk membuat tabel dan
-              mengisi data awal.
+              di Supabase SQL Editor terlebih dahulu untuk membuat tabel, bucket
+              foto, dan mengisi data awal.
             </p>
           ) : null}
         </div>
@@ -443,14 +513,20 @@ export function KepengurusanAdmin() {
         </div>
       ) : null}
 
-      {/* Form Tambah / Edit */}
+      {/* Form Tambah / Edit Nama & Upload Foto */}
       <div className="rounded-[28px] border border-[#0F2B5B]/[0.08] bg-white p-6 shadow-luxury sm:p-8">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-4">
-          <h2 className="font-display text-xl font-semibold text-[#0F2B5B]">
-            {editingId
-              ? "Edit Data Pengurus / Pembina"
-              : "Tambah Nama Baru ke Supabase"}
-          </h2>
+          <div>
+            <h2 className="font-display text-xl font-semibold text-[#0F2B5B]">
+              {editingId
+                ? "Edit Nama, Jabatan & Foto"
+                : "Tambah Nama & Foto Baru"}
+            </h2>
+            <p className="mt-0.5 text-xs text-slate-500">
+              Pilih &ldquo;Edit Nama &amp; Foto&rdquo; pada daftar di bawah untuk
+              mengganti nama atau mengunggah foto siapa pun.
+            </p>
+          </div>
 
           {editingId ? (
             <button
@@ -466,187 +542,266 @@ export function KepengurusanAdmin() {
           ) : null}
         </div>
 
-        <form onSubmit={handleSubmit} className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          <div>
-            <label className="block text-xs font-semibold text-[#0F2B5B]">
-              Nama Lengkap *
-            </label>
-            <input
-              type="text"
-              required
-              value={form.name}
-              onChange={(e) => setForm({ ...form, name: e.target.value })}
-              placeholder="Contoh: Andreas Wijaya, S.Pd."
-              className="mt-1.5 w-full rounded-2xl border border-slate-200 bg-[#F6F8FC] px-4 py-2.5 text-sm text-[#0F2B5B] outline-none focus:border-[#2563EB] focus:bg-white"
-            />
+        <form onSubmit={handleSubmit} className="mt-6 space-y-6">
+          {/* Direct Photo Upload + Live 3:4 Portrait Preview */}
+          <div className="flex flex-col gap-5 rounded-[24px] border border-[#0F2B5B]/[0.06] bg-[#F6F8FC] p-5 sm:flex-row sm:items-center">
+            <div className="relative aspect-[3/4] w-28 shrink-0 overflow-hidden rounded-2xl border border-[#0F2B5B]/15 bg-[#0F2B5B]">
+              {form.photo_url ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img
+                  src={form.photo_url}
+                  alt={form.name || "Preview Foto"}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center font-serif text-3xl italic text-white/80">
+                  {previewInitials}
+                </div>
+              )}
+            </div>
+
+            <div className="flex-1 space-y-3">
+              <div>
+                <p className="text-xs font-semibold text-[#0F2B5B]">
+                  Foto Profil (Rasio 3:4 · JPG, PNG, WebP · Maks 5 MB)
+                </p>
+                <p className="mt-0.5 text-xs text-slate-500">
+                  Foto diunggah langsung ke Supabase Storage dan otomatis tampil
+                  di halaman Kepengurusan.
+                </p>
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2.5">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp"
+                  onChange={handlePhotoUpload}
+                  className="hidden"
+                />
+                <button
+                  type="button"
+                  onClick={() => fileInputRef.current?.click()}
+                  disabled={uploadingPhoto}
+                  className="inline-flex items-center gap-2 rounded-full bg-[#0F2B5B] px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-[#F46F15] disabled:opacity-60"
+                >
+                  <ImagePlus className="h-3.5 w-3.5" />
+                  <span>
+                    {uploadingPhoto
+                      ? "Mengunggah Foto..."
+                      : form.photo_url
+                        ? "Ganti Foto dari Perangkat"
+                        : "Upload Foto dari Perangkat"}
+                  </span>
+                </button>
+
+                {form.photo_url ? (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setForm((prev) => ({ ...prev, photo_url: "" }))
+                    }
+                    className="inline-flex items-center gap-1 rounded-full border border-slate-200 bg-white px-3.5 py-2 text-xs font-semibold text-slate-600 transition-colors hover:border-red-200 hover:text-red-600"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                    <span>Hapus Foto</span>
+                  </button>
+                ) : null}
+              </div>
+
+              <div>
+                <input
+                  type="url"
+                  value={form.photo_url}
+                  onChange={(e) =>
+                    setForm({ ...form, photo_url: e.target.value })
+                  }
+                  placeholder="Atau tempel link URL foto (otomatis terisi setelah upload)"
+                  className="w-full rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs text-[#0F2B5B] outline-none focus:border-[#2563EB]"
+                />
+              </div>
+            </div>
           </div>
 
-          <div>
-            <label className="block text-xs font-semibold text-[#0F2B5B]">
-              Jabatan *
-            </label>
-            <input
-              type="text"
-              required
-              value={form.role}
-              onChange={(e) => setForm({ ...form, role: e.target.value })}
-              placeholder="Contoh: Ketua Umum / Koordinator"
-              className="mt-1.5 w-full rounded-2xl border border-slate-200 bg-[#F6F8FC] px-4 py-2.5 text-sm text-[#0F2B5B] outline-none focus:border-[#2563EB] focus:bg-white"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-[#0F2B5B]">
-              Divisi *
-            </label>
-            <select
-              value={form.division}
-              onChange={(e) =>
-                setForm({
-                  ...form,
-                  division: e.target.value as Exclude<DivisionFilter, "Semua">,
-                })
-              }
-              className="mt-1.5 w-full rounded-2xl border border-slate-200 bg-[#F6F8FC] px-4 py-2.5 text-sm text-[#0F2B5B] outline-none focus:border-[#2563EB] focus:bg-white"
-            >
-              {DIVISIONS_ONLY.map((d) => (
-                <option key={d} value={d}>
-                  {d}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-[#0F2B5B]">
-              Tingkat / Hierarki *
-            </label>
-            <select
-              value={form.tier}
-              onChange={(e) =>
-                setForm({ ...form, tier: e.target.value as MemberTier })
-              }
-              className="mt-1.5 w-full rounded-2xl border border-slate-200 bg-[#F6F8FC] px-4 py-2.5 text-sm text-[#0F2B5B] outline-none focus:border-[#2563EB] focus:bg-white"
-            >
-              {TIER_OPTIONS.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-[#0F2B5B]">
-              Kelas / Unit *
-            </label>
-            <input
-              type="text"
-              required
-              value={form.kelas}
-              onChange={(e) => setForm({ ...form, kelas: e.target.value })}
-              placeholder="Contoh: XII MIPA 1 atau Bidang Kesiswaan"
-              className="mt-1.5 w-full rounded-2xl border border-slate-200 bg-[#F6F8FC] px-4 py-2.5 text-sm text-[#0F2B5B] outline-none focus:border-[#2563EB] focus:bg-white"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-[#0F2B5B]">
-              Urutan Tampil
-            </label>
-            <input
-              type="number"
-              value={form.display_order}
-              onChange={(e) =>
-                setForm({ ...form, display_order: Number(e.target.value) })
-              }
-              className="mt-1.5 w-full rounded-2xl border border-slate-200 bg-[#F6F8FC] px-4 py-2.5 text-sm text-[#0F2B5B] outline-none focus:border-[#2563EB] focus:bg-white"
-            />
-          </div>
-
-          <div className="sm:col-span-2">
-            <label className="block text-xs font-semibold text-[#0F2B5B]">
-              Fokus / Spesialisasi
-            </label>
-            <input
-              type="text"
-              value={form.specialty}
-              onChange={(e) => setForm({ ...form, specialty: e.target.value })}
-              placeholder="Contoh: Gimbal Cinematography & Director of Photography"
-              className="mt-1.5 w-full rounded-2xl border border-slate-200 bg-[#F6F8FC] px-4 py-2.5 text-sm text-[#0F2B5B] outline-none focus:border-[#2563EB] focus:bg-white"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-[#0F2B5B]">
-              URL Foto (Opsional)
-            </label>
-            <input
-              type="url"
-              value={form.photo_url}
-              onChange={(e) => setForm({ ...form, photo_url: e.target.value })}
-              placeholder="https://..."
-              className="mt-1.5 w-full rounded-2xl border border-slate-200 bg-[#F6F8FC] px-4 py-2.5 text-sm text-[#0F2B5B] outline-none focus:border-[#2563EB] focus:bg-white"
-            />
-          </div>
-
-          <div className="sm:col-span-2 lg:col-span-3">
-            <label className="block text-xs font-semibold text-[#0F2B5B]">
-              Kutipan Pembina (Khusus Guru Pembina, Opsional)
-            </label>
-            <input
-              type="text"
-              value={form.quote}
-              onChange={(e) => setForm({ ...form, quote: e.target.value })}
-              placeholder="Pesan singkat pembina..."
-              className="mt-1.5 w-full rounded-2xl border border-slate-200 bg-[#F6F8FC] px-4 py-2.5 text-sm text-[#0F2B5B] outline-none focus:border-[#2563EB] focus:bg-white"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-[#0F2B5B]">
-              URL Instagram (Opsional)
-            </label>
-            <input
-              type="url"
-              value={form.instagram}
-              onChange={(e) => setForm({ ...form, instagram: e.target.value })}
-              placeholder="https://instagram.com/..."
-              className="mt-1.5 w-full rounded-2xl border border-slate-200 bg-[#F6F8FC] px-4 py-2.5 text-sm text-[#0F2B5B] outline-none focus:border-[#2563EB] focus:bg-white"
-            />
-          </div>
-
-          <div>
-            <label className="block text-xs font-semibold text-[#0F2B5B]">
-              URL Portofolio (Opsional)
-            </label>
-            <input
-              type="url"
-              value={form.portfolio}
-              onChange={(e) => setForm({ ...form, portfolio: e.target.value })}
-              placeholder="https://youtube.com/..."
-              className="mt-1.5 w-full rounded-2xl border border-slate-200 bg-[#F6F8FC] px-4 py-2.5 text-sm text-[#0F2B5B] outline-none focus:border-[#2563EB] focus:bg-white"
-            />
-          </div>
-
-          <div className="flex items-end pb-2">
-            <label className="inline-flex cursor-pointer items-center gap-2.5 text-sm font-medium text-[#0F2B5B]">
+          {/* Fields Grid */}
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div>
+              <label className="block text-xs font-semibold text-[#0F2B5B]">
+                Nama Lengkap *
+              </label>
               <input
-                type="checkbox"
-                checked={form.is_active}
-                onChange={(e) =>
-                  setForm({ ...form, is_active: e.target.checked })
-                }
-                className="h-4 w-4 rounded accent-[#F46F15]"
+                type="text"
+                required
+                value={form.name}
+                onChange={(e) => setForm({ ...form, name: e.target.value })}
+                placeholder="Contoh: Andreas Wijaya, S.Pd."
+                className="mt-1.5 w-full rounded-2xl border border-slate-200 bg-[#F6F8FC] px-4 py-2.5 text-sm text-[#0F2B5B] outline-none focus:border-[#2563EB] focus:bg-white"
               />
-              <span>Tampilkan di halaman publik</span>
-            </label>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-[#0F2B5B]">
+                Jabatan *
+              </label>
+              <input
+                type="text"
+                required
+                value={form.role}
+                onChange={(e) => setForm({ ...form, role: e.target.value })}
+                placeholder="Contoh: Guru Pembina / Ketua Umum"
+                className="mt-1.5 w-full rounded-2xl border border-slate-200 bg-[#F6F8FC] px-4 py-2.5 text-sm text-[#0F2B5B] outline-none focus:border-[#2563EB] focus:bg-white"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-[#0F2B5B]">
+                Divisi *
+              </label>
+              <select
+                value={form.division}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    division: e.target.value as Exclude<
+                      DivisionFilter,
+                      "Semua"
+                    >,
+                  })
+                }
+                className="mt-1.5 w-full rounded-2xl border border-slate-200 bg-[#F6F8FC] px-4 py-2.5 text-sm text-[#0F2B5B] outline-none focus:border-[#2563EB] focus:bg-white"
+              >
+                {DIVISIONS_ONLY.map((d) => (
+                  <option key={d} value={d}>
+                    {d}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-[#0F2B5B]">
+                Tingkat / Hierarki *
+              </label>
+              <select
+                value={form.tier}
+                onChange={(e) =>
+                  setForm({ ...form, tier: e.target.value as MemberTier })
+                }
+                className="mt-1.5 w-full rounded-2xl border border-slate-200 bg-[#F6F8FC] px-4 py-2.5 text-sm text-[#0F2B5B] outline-none focus:border-[#2563EB] focus:bg-white"
+              >
+                {TIER_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-[#0F2B5B]">
+                Kelas / Unit *
+              </label>
+              <input
+                type="text"
+                required
+                value={form.kelas}
+                onChange={(e) => setForm({ ...form, kelas: e.target.value })}
+                placeholder="Contoh: XII MIPA 1 atau Pembina Organisasi"
+                className="mt-1.5 w-full rounded-2xl border border-slate-200 bg-[#F6F8FC] px-4 py-2.5 text-sm text-[#0F2B5B] outline-none focus:border-[#2563EB] focus:bg-white"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-[#0F2B5B]">
+                Urutan Tampil
+              </label>
+              <input
+                type="number"
+                value={form.display_order}
+                onChange={(e) =>
+                  setForm({ ...form, display_order: Number(e.target.value) })
+                }
+                className="mt-1.5 w-full rounded-2xl border border-slate-200 bg-[#F6F8FC] px-4 py-2.5 text-sm text-[#0F2B5B] outline-none focus:border-[#2563EB] focus:bg-white"
+              />
+            </div>
+
+            <div className="sm:col-span-2 lg:col-span-3">
+              <label className="block text-xs font-semibold text-[#0F2B5B]">
+                Fokus / Spesialisasi
+              </label>
+              <input
+                type="text"
+                value={form.specialty}
+                onChange={(e) =>
+                  setForm({ ...form, specialty: e.target.value })
+                }
+                placeholder="Contoh: Gimbal Cinematography & Director of Photography"
+                className="mt-1.5 w-full rounded-2xl border border-slate-200 bg-[#F6F8FC] px-4 py-2.5 text-sm text-[#0F2B5B] outline-none focus:border-[#2563EB] focus:bg-white"
+              />
+            </div>
+
+            <div className="sm:col-span-2 lg:col-span-3">
+              <label className="block text-xs font-semibold text-[#0F2B5B]">
+                Kutipan Pembina (Khusus Guru Pembina, Opsional)
+              </label>
+              <input
+                type="text"
+                value={form.quote}
+                onChange={(e) => setForm({ ...form, quote: e.target.value })}
+                placeholder="Pesan singkat guru pembina..."
+                className="mt-1.5 w-full rounded-2xl border border-slate-200 bg-[#F6F8FC] px-4 py-2.5 text-sm text-[#0F2B5B] outline-none focus:border-[#2563EB] focus:bg-white"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-[#0F2B5B]">
+                URL Instagram (Opsional)
+              </label>
+              <input
+                type="url"
+                value={form.instagram}
+                onChange={(e) =>
+                  setForm({ ...form, instagram: e.target.value })
+                }
+                placeholder="https://instagram.com/..."
+                className="mt-1.5 w-full rounded-2xl border border-slate-200 bg-[#F6F8FC] px-4 py-2.5 text-sm text-[#0F2B5B] outline-none focus:border-[#2563EB] focus:bg-white"
+              />
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold text-[#0F2B5B]">
+                URL Portofolio (Opsional)
+              </label>
+              <input
+                type="url"
+                value={form.portfolio}
+                onChange={(e) =>
+                  setForm({ ...form, portfolio: e.target.value })
+                }
+                placeholder="https://youtube.com/..."
+                className="mt-1.5 w-full rounded-2xl border border-slate-200 bg-[#F6F8FC] px-4 py-2.5 text-sm text-[#0F2B5B] outline-none focus:border-[#2563EB] focus:bg-white"
+              />
+            </div>
+
+            <div className="flex items-end pb-2">
+              <label className="inline-flex cursor-pointer items-center gap-2.5 text-sm font-medium text-[#0F2B5B]">
+                <input
+                  type="checkbox"
+                  checked={form.is_active}
+                  onChange={(e) =>
+                    setForm({ ...form, is_active: e.target.checked })
+                  }
+                  className="h-4 w-4 rounded accent-[#F46F15]"
+                />
+                <span>Tampilkan di halaman publik</span>
+              </label>
+            </div>
           </div>
 
-          <div className="sm:col-span-2 lg:col-span-3 pt-2">
+          <div className="pt-1">
             <button
               type="submit"
-              disabled={saving}
+              disabled={saving || uploadingPhoto}
               className="inline-flex items-center gap-2 rounded-full bg-[#F46F15] px-7 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#dc5e0a] disabled:opacity-60"
             >
               <Plus className="h-4 w-4" />
@@ -670,8 +825,8 @@ export function KepengurusanAdmin() {
               Daftar Tersimpan di Supabase ({filteredRows.length})
             </h2>
             <p className="text-xs text-slate-500">
-              Perubahan di sini langsung tampil di halaman publik{" "}
-              <code>/kepengurusan</code>.
+              Klik <strong>Edit Nama &amp; Foto</strong> untuk mengganti nama
+              atau foto anggota/pembina, lalu simpan.
             </p>
           </div>
 
@@ -717,9 +872,19 @@ export function KepengurusanAdmin() {
                 className="flex flex-col justify-between gap-3 py-4 sm:flex-row sm:items-center"
               >
                 <div className="flex items-center gap-3.5">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#F6F8FC] font-display text-xs font-semibold text-[#0F2B5B]">
-                    {row.initials}
-                  </span>
+                  {row.photo_url ? (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img
+                      src={row.photo_url}
+                      alt={row.name}
+                      className="h-11 w-11 shrink-0 rounded-full border border-slate-200 object-cover"
+                    />
+                  ) : (
+                    <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#F6F8FC] font-display text-xs font-semibold text-[#0F2B5B]">
+                      {row.initials}
+                    </span>
+                  )}
+
                   <div>
                     <div className="flex flex-wrap items-center gap-2">
                       <span className="font-display text-sm font-semibold text-[#0F2B5B]">
@@ -728,6 +893,11 @@ export function KepengurusanAdmin() {
                       <span className="rounded-full bg-blue-50 px-2.5 py-0.5 text-[10px] font-semibold text-[#2563EB]">
                         {row.division}
                       </span>
+                      {row.photo_url ? (
+                        <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-medium text-emerald-700">
+                          Ada Foto
+                        </span>
+                      ) : null}
                       {!row.is_active ? (
                         <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-medium text-slate-500">
                           Nonaktif
@@ -744,10 +914,10 @@ export function KepengurusanAdmin() {
                   <button
                     type="button"
                     onClick={() => startEdit(row)}
-                    className="inline-flex items-center gap-1 rounded-full border border-slate-200 px-3.5 py-1.5 text-xs font-semibold text-[#0F2B5B] transition-colors hover:border-[#2563EB] hover:text-[#2563EB]"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 px-3.5 py-1.5 text-xs font-semibold text-[#0F2B5B] transition-colors hover:border-[#2563EB] hover:text-[#2563EB]"
                   >
                     <Edit3 className="h-3.5 w-3.5" />
-                    <span>Edit</span>
+                    <span>Edit Nama &amp; Foto</span>
                   </button>
 
                   {confirmDeleteId === row.id ? (

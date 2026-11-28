@@ -1,6 +1,6 @@
 -- =============================================================================
--- Sinlui TV — Kepengurusan & Dewan Pembina Schema, RLS, Indexes & Initial Seed
--- Jalankan seluruh skrip ini di Supabase Dashboard -> SQL Editor (project Backend-sinlui-tv)
+-- Sinlui TV — Kepengurusan, Dewan Pembina & Storage Foto (Backend-sinlui-tv)
+-- Jalankan seluruh skrip ini di Supabase Dashboard -> SQL Editor
 -- =============================================================================
 
 create table if not exists public.sinlui_tv_members (
@@ -105,7 +105,7 @@ create policy "Authenticated admins can delete Sinlui TV members"
   to authenticated
   using ((select auth.uid()) is not null);
 
--- Idempotent seed data (runs only when table is empty)
+-- Idempotent seed data (1 Guru Pembina + BPH + 5 Divisi)
 insert into public.sinlui_tv_members (
   name,
   role,
@@ -123,44 +123,43 @@ insert into public.sinlui_tv_members (
 )
 select * from (
   values
-    -- Guru Pembina
-    ('Andreas Wijaya, S.Pd.', 'Guru Pembina Utama', 'Pembina', 'pembina', 'Pembina Organisasi', 'Pengarah Program, Etika Jurnalistik & Pembinaan Organisasi', 'AW', 'Sinlui TV adalah ruang belajar nyata bagi siswa untuk berkarya dengan disiplin, kepekaan visual, dan tanggung jawab.', null, null, '2026/2027', 1, true),
-    ('Maria Helena, M.Pd.', 'Guru Pembina Pendamping', 'Pembina', 'pembina', 'Bidang Kesiswaan', 'Koordinasi Liputan Sekolah & Pengembangan Talenta Media', 'MH', 'Setiap bingkai yang direkam siswa hari ini akan menjadi arsip berharga yang menyatukan seluruh keluarga besar sekolah.', null, null, '2026/2027', 2, true),
+    -- Guru Pembina (1 orang)
+    ('Andreas Wijaya, S.Pd.', 'Guru Pembina', 'Pembina', 'pembina', 'Pembina Organisasi', 'Pengarah Program, Etika Jurnalistik & Pembinaan Organisasi', 'AW', 'Sinlui TV adalah ruang belajar nyata bagi siswa untuk berkarya dengan disiplin, kepekaan visual, dan tanggung jawab.', null, null, '2026/2027', 1, true),
 
     -- BPH Lead
-    ('Nathaniel Gunawan', 'Ketua Umum', 'BPH', 'bph-lead', 'XII MIPA 1', 'Executive Producer & Show Direction', 'NG', null, 'https://instagram.com', 'https://youtube.com', '2026/2027', 3, true),
-    ('Felicia Widjaja', 'Wakil Ketua', 'BPH', 'bph-lead', 'XII IPS 2', 'Production Management & External Liaison', 'FW', null, 'https://instagram.com', null, '2026/2027', 4, true),
+    ('Nathaniel Gunawan', 'Ketua Umum', 'BPH', 'bph-lead', 'XII MIPA 1', 'Executive Producer & Show Direction', 'NG', null, 'https://instagram.com', 'https://youtube.com', '2026/2027', 2, true),
+    ('Felicia Widjaja', 'Wakil Ketua', 'BPH', 'bph-lead', 'XII IPS 2', 'Production Management & External Liaison', 'FW', null, 'https://instagram.com', null, '2026/2027', 3, true),
 
     -- BPH Inti
-    ('Audrey Santoso', 'Sekretaris I', 'BPH', 'bph', 'XI MIPA 2', 'Administrasi Liputan & Perizinan', 'AS', null, 'https://instagram.com', null, '2026/2027', 5, true),
-    ('Matthew Halim', 'Sekretaris II', 'BPH', 'bph', 'XI IPS 1', 'Arsip Inventaris & Jadwal Kru', 'MH', null, 'https://instagram.com', null, '2026/2027', 6, true),
-    ('Michelle Kusuma', 'Bendahara I', 'BPH', 'bph', 'XII MIPA 4', 'Anggaran Produksi & Pengadaan Gear', 'MK', null, 'https://instagram.com', null, '2026/2027', 7, true),
-    ('Bryan Tjandra', 'Bendahara II', 'BPH', 'bph', 'XI MIPA 5', 'Logistik & Pemeliharaan Perangkat', 'BT', null, 'https://instagram.com', null, '2026/2027', 8, true),
+    ('Audrey Santoso', 'Sekretaris I', 'BPH', 'bph', 'XI MIPA 2', 'Administrasi Liputan & Perizinan', 'AS', null, 'https://instagram.com', null, '2026/2027', 4, true),
+    ('Matthew Halim', 'Sekretaris II', 'BPH', 'bph', 'XI IPS 1', 'Arsip Inventaris & Jadwal Kru', 'MH', null, 'https://instagram.com', null, '2026/2027', 5, true),
+    ('Michelle Kusuma', 'Bendahara I', 'BPH', 'bph', 'XII MIPA 4', 'Anggaran Produksi & Pengadaan Gear', 'MK', null, 'https://instagram.com', null, '2026/2027', 6, true),
+    ('Bryan Tjandra', 'Bendahara II', 'BPH', 'bph', 'XI MIPA 5', 'Logistik & Pemeliharaan Perangkat', 'BT', null, 'https://instagram.com', null, '2026/2027', 7, true),
 
     -- Divisi Fotografi
-    ('Rafael Sutanto', 'Koordinator Fotografi', 'Fotografi', 'koordinator', 'XII MIPA 3', 'Stage & Sport Photojournalism', 'RS', null, 'https://instagram.com', 'https://instagram.com', '2026/2027', 9, true),
-    ('Jocelyn Tanoto', 'Anggota Fotografi', 'Fotografi', 'anggota', 'XI MIPA 1', 'Editorial Portrait & Event Coverage', 'JT', null, 'https://instagram.com', null, '2026/2027', 10, true),
-    ('Darren Setiawan', 'Anggota Fotografi', 'Fotografi', 'anggota', 'X-4', 'Tribun Action & Candid Documentary', 'DS', null, 'https://instagram.com', null, '2026/2027', 11, true),
+    ('Rafael Sutanto', 'Koordinator Fotografi', 'Fotografi', 'koordinator', 'XII MIPA 3', 'Stage & Sport Photojournalism', 'RS', null, 'https://instagram.com', 'https://instagram.com', '2026/2027', 8, true),
+    ('Jocelyn Tanoto', 'Anggota Fotografi', 'Fotografi', 'anggota', 'XI MIPA 1', 'Editorial Portrait & Event Coverage', 'JT', null, 'https://instagram.com', null, '2026/2027', 9, true),
+    ('Darren Setiawan', 'Anggota Fotografi', 'Fotografi', 'anggota', 'X-4', 'Tribun Action & Candid Documentary', 'DS', null, 'https://instagram.com', null, '2026/2027', 10, true),
 
     -- Divisi Videografi
-    ('Christopher Lim', 'Koordinator Videografi', 'Videografi', 'koordinator', 'XII IPS 1', 'Gimbal Cinematography & Director of Photography', 'CL', null, 'https://instagram.com', 'https://youtube.com', '2026/2027', 12, true),
-    ('Evelyn Hartanto', 'Anggota Videografi', 'Videografi', 'anggota', 'XI MIPA 6', 'Docuseries Camera & Lighting Setup', 'EH', null, 'https://instagram.com', null, '2026/2027', 13, true),
-    ('Kenneth Wijaya', 'Anggota Videografi', 'Videografi', 'anggota', 'X-2', 'B-Roll & Multi-Angle Camera Operator', 'KW', null, 'https://instagram.com', null, '2026/2027', 14, true),
+    ('Christopher Lim', 'Koordinator Videografi', 'Videografi', 'koordinator', 'XII IPS 1', 'Gimbal Cinematography & Director of Photography', 'CL', null, 'https://instagram.com', 'https://youtube.com', '2026/2027', 11, true),
+    ('Evelyn Hartanto', 'Anggota Videografi', 'Videografi', 'anggota', 'XI MIPA 6', 'Docuseries Camera & Lighting Setup', 'EH', null, 'https://instagram.com', null, '2026/2027', 12, true),
+    ('Kenneth Wijaya', 'Anggota Videografi', 'Videografi', 'anggota', 'X-2', 'B-Roll & Multi-Angle Camera Operator', 'KW', null, 'https://instagram.com', null, '2026/2027', 13, true),
 
     -- Divisi Editing
-    ('Vanessa Prawira', 'Koordinator Editing', 'Editing', 'koordinator', 'XII MIPA 2', 'Aftermovie Pacing & Color Grading', 'VP', null, 'https://instagram.com', 'https://youtube.com', '2026/2027', 15, true),
-    ('Joshua Anggara', 'Anggota Editing', 'Editing', 'anggota', 'XI IPS 3', 'Sound Design & Motion Titles', 'JA', null, 'https://instagram.com', null, '2026/2027', 16, true),
-    ('Keira Nathania', 'Anggota Editing', 'Editing', 'anggota', 'X-7', 'Short-Form Reels & Same-Day Edit', 'KN', null, 'https://instagram.com', null, '2026/2027', 17, true),
+    ('Vanessa Prawira', 'Koordinator Editing', 'Editing', 'koordinator', 'XII MIPA 2', 'Aftermovie Pacing & Color Grading', 'VP', null, 'https://instagram.com', 'https://youtube.com', '2026/2027', 14, true),
+    ('Joshua Anggara', 'Anggota Editing', 'Editing', 'anggota', 'XI IPS 3', 'Sound Design & Motion Titles', 'JA', null, 'https://instagram.com', null, '2026/2027', 15, true),
+    ('Keira Nathania', 'Anggota Editing', 'Editing', 'anggota', 'X-7', 'Short-Form Reels & Same-Day Edit', 'KN', null, 'https://instagram.com', null, '2026/2027', 16, true),
 
     -- Divisi Broadcasting
-    ('Jonathan Kurniawan', 'Koordinator Broadcasting', 'Broadcasting', 'koordinator', 'XII MIPA 5', 'Technical Director & Multicam Switching', 'JK', null, 'https://instagram.com', null, '2026/2027', 18, true),
-    ('Celine Chandra', 'Anggota Broadcasting', 'Broadcasting', 'anggota', 'XI MIPA 4', 'Live Graphics, Lower-Third & vMix', 'CC', null, 'https://instagram.com', null, '2026/2027', 19, true),
-    ('Nicholas Budiman', 'Anggota Broadcasting', 'Broadcasting', 'anggota', 'X-1', 'Audio Routing & Network Stream Ops', 'NB', null, 'https://instagram.com', null, '2026/2027', 20, true),
+    ('Jonathan Kurniawan', 'Koordinator Broadcasting', 'Broadcasting', 'koordinator', 'XII MIPA 5', 'Technical Director & Multicam Switching', 'JK', null, 'https://instagram.com', null, '2026/2027', 17, true),
+    ('Celine Chandra', 'Anggota Broadcasting', 'Broadcasting', 'anggota', 'XI MIPA 4', 'Live Graphics, Lower-Third & vMix', 'CC', null, 'https://instagram.com', null, '2026/2027', 18, true),
+    ('Nicholas Budiman', 'Anggota Broadcasting', 'Broadcasting', 'anggota', 'X-1', 'Audio Routing & Network Stream Ops', 'NB', null, 'https://instagram.com', null, '2026/2027', 19, true),
 
     -- Divisi Desain & Publikasi
-    ('Valerie Salim', 'Koordinator Desain & Publikasi', 'Desain & Publikasi', 'koordinator', 'XII IPS 3', 'Visual Identity & Creative Direction', 'VS', null, 'https://instagram.com', 'https://instagram.com', '2026/2027', 21, true),
-    ('Tiffany Gunardi', 'Anggota Desain & Publikasi', 'Desain & Publikasi', 'anggota', 'XI IPS 2', 'Thumbnail Kit & Editorial Carousel', 'TG', null, 'https://instagram.com', null, '2026/2027', 22, true),
-    ('Adrian Surya', 'Anggota Desain & Publikasi', 'Desain & Publikasi', 'anggota', 'X-6', 'Copywriting & Social Media Publishing', 'AS', null, 'https://instagram.com', null, '2026/2027', 23, true)
+    ('Valerie Salim', 'Koordinator Desain & Publikasi', 'Desain & Publikasi', 'koordinator', 'XII IPS 3', 'Visual Identity & Creative Direction', 'VS', null, 'https://instagram.com', 'https://instagram.com', '2026/2027', 20, true),
+    ('Tiffany Gunardi', 'Anggota Desain & Publikasi', 'Desain & Publikasi', 'anggota', 'XI IPS 2', 'Thumbnail Kit & Editorial Carousel', 'TG', null, 'https://instagram.com', null, '2026/2027', 21, true),
+    ('Adrian Surya', 'Anggota Desain & Publikasi', 'Desain & Publikasi', 'anggota', 'X-6', 'Copywriting & Social Media Publishing', 'AS', null, 'https://instagram.com', null, '2026/2027', 22, true)
 ) as seed(
   name,
   role,
@@ -177,3 +176,65 @@ select * from (
   is_active
 )
 where not exists (select 1 from public.sinlui_tv_members);
+
+-- Hapus demo pembina ke-2 jika skrip versi sebelumnya sempat dijalankan
+delete from public.sinlui_tv_members
+where name = 'Maria Helena, M.Pd.' and division = 'Pembina';
+
+-- =============================================================================
+-- Supabase Storage Bucket & Policies untuk Upload Foto Anggota & Pembina
+-- =============================================================================
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values (
+  'member-photos',
+  'member-photos',
+  true,
+  5242880,
+  array['image/jpeg', 'image/png', 'image/webp']
+)
+on conflict (id) do update
+set
+  public = excluded.public,
+  file_size_limit = excluded.file_size_limit,
+  allowed_mime_types = excluded.allowed_mime_types;
+
+drop policy if exists "Public can view Sinlui TV member photos" on storage.objects;
+create policy "Public can view Sinlui TV member photos"
+  on storage.objects
+  for select
+  to public
+  using (bucket_id = 'member-photos');
+
+drop policy if exists "Authenticated admins can upload Sinlui TV member photos" on storage.objects;
+create policy "Authenticated admins can upload Sinlui TV member photos"
+  on storage.objects
+  for insert
+  to authenticated
+  with check (
+    bucket_id = 'member-photos'
+    and (select auth.uid()) is not null
+  );
+
+drop policy if exists "Authenticated admins can update Sinlui TV member photos" on storage.objects;
+create policy "Authenticated admins can update Sinlui TV member photos"
+  on storage.objects
+  for update
+  to authenticated
+  using (
+    bucket_id = 'member-photos'
+    and (select auth.uid()) is not null
+  )
+  with check (
+    bucket_id = 'member-photos'
+    and (select auth.uid()) is not null
+  );
+
+drop policy if exists "Authenticated admins can delete Sinlui TV member photos" on storage.objects;
+create policy "Authenticated admins can delete Sinlui TV member photos"
+  on storage.objects
+  for delete
+  to authenticated
+  using (
+    bucket_id = 'member-photos'
+    and (select auth.uid()) is not null
+  );

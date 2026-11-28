@@ -221,7 +221,12 @@ export function OrgDirectory({
                 </span>
               </div>
 
-              <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+              <div
+                className={cn(
+                  "grid grid-cols-1 gap-6",
+                  pembinaList.length === 1 ? "max-w-3xl" : "lg:grid-cols-2"
+                )}
+              >
                 {pembinaList.map((member) => (
                   <PembinaCard key={member.id} member={member} />
                 ))}
