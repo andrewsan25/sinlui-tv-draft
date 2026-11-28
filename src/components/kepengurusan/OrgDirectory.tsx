@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   DIVISION_FILTERS,
@@ -81,31 +82,38 @@ function PembinaCard({ member }: { member: Member }) {
   );
 }
 
-export function OrgDirectory() {
+export function OrgDirectory({
+  members = MEMBERS,
+}: {
+  members?: Member[];
+}) {
   const [activeFilter, setActiveFilter] = useState<DivisionFilter>("Semua");
   const shouldReduceMotion = useReducedMotion();
 
   const countForFilter = (filter: DivisionFilter) => {
-    if (filter === "Semua") return MEMBERS.length;
-    return MEMBERS.filter((m) => m.division === filter).length;
+    if (filter === "Semua") return members.length;
+    return members.filter((m) => m.division === filter).length;
   };
 
-  const pembinaList = MEMBERS.filter((m) => m.tier === "pembina");
-  const bphLeads = MEMBERS.filter((m) => m.tier === "bph-lead");
-  const bphCore = MEMBERS.filter((m) => m.tier === "bph");
+  const pembinaList = members.filter((m) => m.tier === "pembina");
+  const bphLeads = members.filter((m) => m.tier === "bph-lead");
+  const bphCore = members.filter((m) => m.tier === "bph");
 
   const divisionMembers =
     activeFilter === "Semua"
-      ? MEMBERS.filter(
+      ? members.filter(
           (m) => m.division !== "BPH" && m.division !== "Pembina"
         )
       : activeFilter === "BPH" || activeFilter === "Pembina"
         ? []
-        : MEMBERS.filter((m) => m.division === activeFilter);
+        : members.filter((m) => m.division === activeFilter);
 
   const showPembinaSection =
-    activeFilter === "Semua" || activeFilter === "Pembina";
-  const showBphSection = activeFilter === "Semua" || activeFilter === "BPH";
+    (activeFilter === "Semua" || activeFilter === "Pembina") &&
+    pembinaList.length > 0;
+  const showBphSection =
+    (activeFilter === "Semua" || activeFilter === "BPH") &&
+    (bphLeads.length > 0 || bphCore.length > 0);
   const showDivisionSection = divisionMembers.length > 0;
 
   return (
@@ -164,6 +172,25 @@ export function OrgDirectory() {
             })}
           </div>
         </div>
+
+        {/* Empty State */}
+        {members.length === 0 ? (
+          <div className="mt-12 rounded-[28px] border border-[#0F2B5B]/[0.08] bg-[#F6F8FC] p-10 text-center">
+            <h2 className="font-display text-2xl font-semibold text-[#0F2B5B]">
+              Belum ada data kepengurusan aktif
+            </h2>
+            <p className="mx-auto mt-2 max-w-md text-sm text-slate-500">
+              Tambahkan nama Guru Pembina, BPH, atau anggota divisi melalui
+              Supabase Table Editor maupun panel admin.
+            </p>
+            <Link
+              href="/admin/kepengurusan"
+              className="mt-6 inline-flex items-center rounded-full bg-[#0F2B5B] px-6 py-3 text-xs font-semibold text-white transition-colors hover:bg-[#F46F15]"
+            >
+              Kelola Data Kepengurusan
+            </Link>
+          </div>
+        ) : null}
 
         {/* Hierarchy Sections */}
         <AnimatePresence mode="popLayout">
@@ -230,27 +257,31 @@ export function OrgDirectory() {
               </div>
 
               {/* Ketua & Wakil Ketua Prominent Spread */}
-              <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-                {bphLeads.map((member, idx) => (
-                  <MemberCard
-                    key={member.id}
-                    member={member}
-                    featured
-                    codeLabel={`BPH · 0${idx + 1}`}
-                  />
-                ))}
-              </div>
+              {bphLeads.length > 0 ? (
+                <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
+                  {bphLeads.map((member, idx) => (
+                    <MemberCard
+                      key={member.id}
+                      member={member}
+                      featured
+                      codeLabel={`BPH · 0${idx + 1}`}
+                    />
+                  ))}
+                </div>
+              ) : null}
 
               {/* Sekretaris & Bendahara Row */}
-              <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
-                {bphCore.map((member, idx) => (
-                  <MemberCard
-                    key={member.id}
-                    member={member}
-                    codeLabel={`BPH · 0${idx + 3}`}
-                  />
-                ))}
-              </div>
+              {bphCore.length > 0 ? (
+                <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+                  {bphCore.map((member, idx) => (
+                    <MemberCard
+                      key={member.id}
+                      member={member}
+                      codeLabel={`BPH · 0${bphLeads.length + idx + 1}`}
+                    />
+                  ))}
+                </div>
+              ) : null}
             </motion.div>
           ) : null}
 
